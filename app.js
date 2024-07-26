@@ -3,10 +3,10 @@ const path = require("path");
 const routes = require("./routes");
 const { engine } = require("express-handlebars");
 
-const flash = require("connect-flash");
 const app = express();
 const port = process.env.PORT || 3000;
 
+const flash = require("connect-flash");
 const session = require("express-session");
 const SESSION_SECRET = "secret"; 
 const { User, Schedule } = require("./models");
