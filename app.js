@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const routes = require("./routes");
 const { engine } = require("express-handlebars");
 
 const app = express();
@@ -14,10 +15,15 @@ app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  res.render('signin')
-})
+// app.get('/', (req, res) => {
+//   res.render('signin')
+// })
 
+app.get("/signup", (req, res) => {
+  res.render("signup", { error: req.flash("error") });
+});
+
+app.use(routes);
 app.listen(port, () => {
   console.info(`Example app listening on port ${port}!`);
 });
