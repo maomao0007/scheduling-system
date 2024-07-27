@@ -35,9 +35,13 @@ const userController = {
     res.redirect("/schedules");
   },
   logout: (req, res) => {
-    req.flash("success_messages", "Successfully logged out！");
-    req.logout();
-    res.redirect("/signin");
-  },
-};
+    req.logout((err) => {
+        if (err) {
+            return next(err); 
+        }
+        req.flash("success_messages", "Successfully logged out！");
+        res.redirect("/signin");
+    });
+  }
+}
 module.exports = userController;

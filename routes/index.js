@@ -4,6 +4,7 @@ const passport = require("../config/passport");
 
 const scheduleController = require("../controllers/schedule-controller"); 
 const userController = require("../controllers/user-controller"); 
+const { authenticated } = require('../middleware/auth') 
 const { generalErrorHandler } = require("../middleware/error-handler");
 const admin = require("./modules/admin");
 router.use("/admin", admin);
@@ -20,7 +21,7 @@ router.post(
 ); 
 router.get("/logout", userController.logout);
 
-router.get("/schedules", scheduleController.getSchedules);
+router.get("/schedules", authenticated, scheduleController.getSchedules);
 router.use("/", (req, res) => res.redirect('/schedules'))
 router.use("/", generalErrorHandler); 
 
