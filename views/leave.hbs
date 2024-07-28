@@ -1,0 +1,25 @@
+
+<script>
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+
+    // When the start date is selected, update the minimum value of the end date
+    startDateInput.addEventListener('change', function() {
+      const startDate = this.value;
+      endDateInput.min = startDate;
+    });
+
+    // When the end date is selected, update the maximum value of the start date
+    endDateInput.addEventListener('change', function() {
+      const endDate = this.value;
+      startDateInput.max = endDate;
+    });
+
+    function confirmSubmission() {
+      return confirm('Are you sure you want to submit this form?');
+        }
+</script>
+
+
+
+

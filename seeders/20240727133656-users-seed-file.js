@@ -30,6 +30,30 @@ module.exports = {
           created_at: new Date(),
           updated_at: new Date(),
         },
+        {
+          email: "user3@example.com",
+          password: await bcrypt.hash("123", 10),
+          is_admin: false,
+          name: "user3",
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          email: "user4@example.com",
+          password: await bcrypt.hash("123", 10),
+          is_admin: false,
+          name: "user4",
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          email: "user5@example.com",
+          password: await bcrypt.hash("123", 10),
+          is_admin: false,
+          name: "user5",
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ],
       {}
     );

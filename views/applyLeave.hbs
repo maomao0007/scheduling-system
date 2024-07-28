@@ -1,0 +1,52 @@
+{{> schedule-tabs route='applyLeave'}}
+
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Annual Leave Request</h3>
+    </div>
+    <div class="card-body">
+      <form action="/admin/leave" method="POST">
+        <div class="mb-3">
+          <label class="form-label">Employee Name:</label>
+          <input type="text" class="form-control" value="{{user.name}}" readonly>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="startDate" class="form-label">Start Date:</label>
+            <input id="startDate" type="date" name="startDate" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="endDate" class="form-label">End Date:</label>
+            <input id="endDate" type="date" name="endDate" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button class="btn btn-primary" type="submit" onclick="return confirmSubmission()">Submit Request</button>
+          <a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const startDateInput = document.getElementById('startDate');
+  const endDateInput = document.getElementById('endDate');
+
+  startDateInput.addEventListener('change', function() {
+    const startDate = this.value;
+    endDateInput.min = startDate;
+  });
+
+  endDateInput.addEventListener('change', function() {
+    const endDate = this.value;
+    startDateInput.max = endDate;
+  });
+
+  function confirmSubmission() {
+    return confirm('Are you sure you want to submit this leave request?');
+  }
+</script>

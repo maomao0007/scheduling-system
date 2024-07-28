@@ -1,0 +1,14 @@
+<ul class="nav nav-tabs mb-4">
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'index'}}active{{/ifCond}}" href="/schedules">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'feeds'}}active{{/ifCond}}" href="/schedules/feeds">Latest Updates</a>
+  </li>
+   <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'applyLeave'}}active{{/ifCond}}" href="/schedules/applyLeave">Annual Leave Request</a>
+  </li>
+   <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'shiftChange'}}active{{/ifCond}}" href="/schedules/shiftChange">Shift Change Request</a>
+  </li>
+</ul>

@@ -22,6 +22,11 @@ router.post(
 router.get("/logout", userController.logout);
 
 router.get("/schedules", authenticated, scheduleController.getSchedules);
+router.get("/schedules/applyLeave",
+  authenticated,
+  scheduleController.getApplyLeave
+);
+// router.post("/leave", authenticated, scheduleController.postLeave);
 router.use("/", (req, res) => res.redirect('/schedules'))
 router.use("/", generalErrorHandler); 
 

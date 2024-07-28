@@ -1,0 +1,26 @@
+{{> schedule-tabs route='index'}}
+
+<h1>Schedules</h1>
+  <div id='calendar'></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const calendarEl = document.getElementById('calendar');
+      
+      // Embed the schedule data
+      const schedules = {{{ json schedules }}};
+
+      // Generate events data for FullCalendar
+      const events = schedules.map(schedule => ({
+        title: `${schedule.User.name} - ${schedule.shift}`,
+        start: schedule.date
+      }));
+
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: events
+      });
+
+      calendar.render();
+    });
+  </script>
