@@ -1,14 +1,14 @@
-"use strict";
-const dayjs = require("dayjs");
+'use strict';
+const dayjs = require('dayjs');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const users = await queryInterface.sequelize.query(
-      `SELECT id, name FROM Users WHERE name != 'root';`
+      'SELECT id, name FROM Users WHERE name != \'root\';'
     );
 
     const userIds = users[0].map((user) => user.id);
-    const shifts = ["Dayshift", "Middleshift", "Nightshift"];
+    const shifts = ['Dayshift', 'Middleshift', 'Nightshift'];
     const daysOffPerWeek = 2;
     const schedules = [];
     const currentDate = dayjs();
@@ -29,7 +29,7 @@ module.exports = {
 
     for (let day = 1; day <= daysInMonth; day++) {
       const date = dayjs(new Date(currentYear, currentMonth, day)).format(
-        "YYYY-MM-DD"
+        'YYYY-MM-DD'
       );
 
       let assignedShifts = {
@@ -53,12 +53,12 @@ module.exports = {
         }
 
         const availableShifts = shifts.filter((shift) => {
-          if (shift === "Dayshift") return assignedShifts[shift] === null;
-          if (shift === "Middleshift" && userShiftData.lastShift !== "Dayshift")
+          if (shift === 'Dayshift') return assignedShifts[shift] === null;
+          if (shift === 'Middleshift' && userShiftData.lastShift !== 'Dayshift')
             return assignedShifts[shift] === null;
           if (
-            shift === "Nightshift" &&
-            userShiftData.lastShift !== "Middleshift"
+            shift === 'Nightshift' &&
+            userShiftData.lastShift !== 'Middleshift'
           )
             return assignedShifts[shift] === null;
           return false;
@@ -82,10 +82,10 @@ module.exports = {
       });
     }
 
-    await queryInterface.bulkInsert("Schedules", schedules, {});
+    await queryInterface.bulkInsert('Schedules', schedules, {});
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("Schedules", null, {});
+    await queryInterface.bulkDelete('Schedules', null, {});
   },
 };

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Schedule.belongsTo(models.User, { foreignkey: "userId" });
+      Schedule.belongsTo(models.User, { foreignkey: 'userId' });
     }
   }
   Schedule.init(
@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Schedule",
-      tableName: "Schedules",
+      modelName: 'Schedule',
+      tableName: 'Schedules',
       underscored: true,
     }
   );

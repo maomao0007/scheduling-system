@@ -1,17 +1,17 @@
-const bcrypt = require('bcryptjs') 
-const { User } = require('../models')
+const bcrypt = require('bcryptjs'); 
+const { User } = require('../models');
 
 const userController = {
   signUpPage: (req, res) => {
-    res.render("signup");
+    res.render('signup');
   },
 
   signUp: (req, res, next) => {
     if (req.body.password !== req.body.passwordCheck)
-      throw new Error("Passwords do not match!");
+      throw new Error('Passwords do not match!');
     User.findOne({ where: { email: req.body.email } })
       .then((user) => {
-        if (user) throw new Error("Email already exists!");
+        if (user) throw new Error('Email already exists!');
         return bcrypt.hash(req.body.password, 10);
       })
       .then((hash) =>
@@ -22,26 +22,26 @@ const userController = {
         })
       )
       .then(() => {
-        req.flash("success_messages", "Successfully registered！");
-        res.redirect("/signin");
+        req.flash('success_messages', 'Successfully registered！');
+        res.redirect('/signin');
       })
       .catch((err) => next(err));
   },
   signInPage: (req, res) => {
-    res.render("signin");
+    res.render('signin');
   },
   signIn: (req, res) => {
-    req.flash("success_messages", "Successfully logged in！");
-    res.redirect("/schedules");
+    req.flash('success_messages', 'Successfully logged in！');
+    res.redirect('/schedules');
   },
   logout: (req, res) => {
     req.logout((err) => {
         if (err) {
             return next(err); 
         }
-        req.flash("success_messages", "Successfully logged out！");
-        res.redirect("/signin");
+        req.flash('success_messages', 'Successfully logged out！');
+        res.redirect('/signin');
     });
   }
-}
+};
 module.exports = userController;

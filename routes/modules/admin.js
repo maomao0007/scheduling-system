@@ -1,7 +1,10 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const adminController = require("../../controllers/admin-controller");
-const { authenticatedAdmin } = require("../../middleware/auth"); 
-router.get("/scheduled", authenticatedAdmin, adminController.getSchedules);
-router.use("/", (req, res) => res.redirect("/admin/schedules"));
+const adminController = require('../../controllers/admin-controller');
+const { authenticatedAdmin } = require('../../middleware/auth'); 
+router.get('/schedules', authenticatedAdmin, adminController.getSchedules);
+router.patch("/users/:id", authenticatedAdmin, adminController.patchUser);
+router.get("/users", authenticatedAdmin, adminController.getUsers);
+router.get('/leaves', authenticatedAdmin, adminController.getLeaves);
+router.use('/', (req, res) => res.redirect('/admin/schedules'));
 module.exports = router;

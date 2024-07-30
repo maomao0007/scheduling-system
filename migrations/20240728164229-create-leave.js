@@ -7,25 +7,25 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
-      startDate: {
-        type: Sequelize.DATEONLY
+      start_date: {
+        type: Sequelize.DATEONLY,
       },
-      endDate: {
-        type: Sequelize.DATEONLY
+      end_date: {
+        type: Sequelize.DATEONLY,
       },
-      userId: {
-        type: Sequelize.INTEGER
+      user_id: {
+        type: Sequelize.INTEGER,
       },
       created_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updated_at: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

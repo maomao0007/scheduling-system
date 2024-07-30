@@ -1,0 +1,31 @@
+{{> admin-tabs route="users" }}
+
+<div class="container mt-4">
+  <h2 class="mb-4">All Users</h2>
+
+  <table class="table table-striped table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">User ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+        <th scope="col">Change access rights</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+      <tr>
+        <td>{{this.id}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.email}}</td>
+        <td>{{#if this.isAdmin }}admin{{else}}user{{/if}}</td>
+        <td><form action="/admin/users/{{this.id}}?_method=PATCH" method="POST"><button type="submit" class="btn-link" style="border: none; background: none;">
+        {{#if this.isAdmin }}set as user{{else}}set as admin{{/if}}
+        </button>
+        </form>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

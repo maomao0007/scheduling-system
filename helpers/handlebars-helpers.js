@@ -1,4 +1,4 @@
-const dayjs = require("dayjs"); 
+const dayjs = require('dayjs'); 
 module.exports = {
   currentYear: () => dayjs().year(),
   ifCond: function (a, b, options) {
