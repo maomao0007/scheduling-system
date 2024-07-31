@@ -11,18 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Schedule.belongsTo(models.User, { foreignkey: 'userId' });
+      Schedule.belongsTo(models.Shift, { foreignkey: "shiftId" });
     }
   }
   Schedule.init(
     {
       userId: DataTypes.INTEGER,
-      shift: DataTypes.STRING,
-      date: DataTypes.DATEONLY,
+      shiftId: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: 'Schedule',
-      tableName: 'Schedules',
+      modelName: "Schedule",
+      tableName: "Schedules",
       underscored: true,
     }
   );

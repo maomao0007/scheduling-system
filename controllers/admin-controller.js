@@ -1,7 +1,11 @@
 const { User, Leave } = require('../models');
 const adminController = {
-  getSchedules: (req, res) => {
+  getSchedules: (req, res, next) => {
     return res.render("admin/schedules");
+  },
+  postSchedules: (req, res, next) => {
+    
+    return res.render("admin/createSchedules");
   },
   getUsers: (req, res, next) => {
     User.findAll({
@@ -21,7 +25,7 @@ const adminController = {
           req.flash(
             "error_messages",
             "Unable to modify root access permissions."
-          )
+          );
           return res.redirect("back");
         }
         return user.update({ isAdmin: !user.isAdmin });

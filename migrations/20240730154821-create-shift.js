@@ -1,19 +1,29 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Schedules', {
+  async up (queryInterface, Sequelize) {
+    await queryInterface.createTable("Shifts", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      user_id: {
-        type: Sequelize.INTEGER,
-      },
-      shift_id: {
+      name: {
         type: Sequelize.STRING,
+      },
+      start_time: {
+        type: Sequelize.TIME,
+      },
+      end_time: {
+        type: Sequelize.TIME,
+      },
+      start_date: {
+        type: Sequelize.DATEONLY,
+      },
+      end_date: {
+        type: Sequelize.DATEONLY,
       },
       created_at: {
         allowNull: false,
@@ -25,7 +35,7 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Schedules');
+  async down (queryInterface, Sequelize) {
+    await queryInterface.dropTable("Shifts");
   }
 };
