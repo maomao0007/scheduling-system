@@ -1,0 +1,55 @@
+{{> admin-tabs route="createSchedule" }}
+
+<div class="container mt-5">
+    <div class="form-container bg-light p-4">
+        <h2 class="text-center mb-4">Create a New Schedule</h2>
+        <form action="/admin/schedules" method="POST">
+            <div class="form-group">
+                <label for="date" class="form-label">Date:</label>
+                <input type="date" id="date" name="date" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="userName" class="form-label">User Name:</label>
+                <select name="userId" id="userName" class="form-control" required>
+                    <option value="" disabled selected>Select User</option>
+                    {{#each users}}
+                    <option value="{{this.id}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="shiftName" class="form-label">Shift Name:</label>
+                <select name="shiftId" id="shiftName" class="form-control" required>
+                    <option value="" disabled selected>Select Shift</option>
+                    {{#each shifts}}
+                    <option value="{{this.id}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <button type="submit" class="mt-4 btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 設置日期輸入框的最小值為今天
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('scheduleDate').min = today;
+
+    // 如果需要，你可以在這裡添加表單驗證邏輯
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const date = document.getElementById('scheduleDate').value;
+        const userId = document.getElementById('userName').value;
+        const shiftId = document.getElementById('shiftName').value;
+
+        if (!date || !userId || !shiftId) {
+            e.preventDefault();
+            alert('Please fill in all fields');
+        }
+    });
+});
+</script>

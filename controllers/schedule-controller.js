@@ -1,18 +1,23 @@
-const { Schedule, User, Leave } = require('../models');
+const { Schedule, User, Shift } = require('../models');
 
 const scheduleController = {
-  getSchedules: (req, res, next) => {
+  getSchedules: async (req, res, next) => {
+   try{
+    const [schedules, users, shifts] = await Promise.all([
     Schedule.findAll({
-      include: [{ model: User, attributes: ['name'], as: 'User' }],
+      include:  ["User", "Shift"],
       nest: true,
       raw: true,
-    })
-      .then((schedules) => {
-        if (!schedules) throw new Error('This schedule didn\'t exist.');
-        // console.log(schedules);
-        return res.render('schedules', { schedules });
-      })
-      .catch((err) => next(err));
-  },
-};
+    }),
+      User.findAll({ raw: true }),
+      Shift.findAll({ raw: true }),
+    ])
+      console.log(schedules);
+      if (!schedules) throw new Error('This schedule did not exist.');
+      return res.render('schedules', { schedules, users, shifts });
+
+    } catch(err) { 
+      next(err)}
+  }
+}
 module.exports = scheduleController;

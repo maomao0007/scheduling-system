@@ -18,12 +18,14 @@ const session = require('express-session');
 const SESSION_SECRET = process.env.SESSION_SECRET;
 const { getUser } = require('./helpers/auth-helpers');
 
+app.use(express.static(path.join(__dirname, "public")));
 // use Handlebars template engine, and specify the file extension as.hbs
 app.engine('hbs', engine({ extname: '.hbs', helpers: handlebarsHelpers }));
 // set Handlebars as the template engine
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
+
 app.use(methodOverride("_method"));
 app.use(
   session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false })
