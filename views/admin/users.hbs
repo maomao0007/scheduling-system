@@ -17,7 +17,7 @@
       {{#each users}}
       <tr>
         <td>{{this.id}}</td>
-        <td>{{this.name}}</td>
+        <td><a href="/users/{{this.id}}">{{this.name}}</a></td>
         <td>{{this.email}}</td>
         <td>{{#if this.isAdmin }}admin{{else}}user{{/if}}</td>
         <td><form action="/admin/users/{{this.id}}?_method=PATCH" method="POST"><button type="submit" class="btn-link" style="border: none; background: none;">

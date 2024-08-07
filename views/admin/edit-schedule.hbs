@@ -1,35 +1,35 @@
-{{> admin-tabs route="createSchedule" }}
+<a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
 
 <div class="container mt-5">
     <div class="form-container bg-light p-4">
-        <h2 class="text-center mb-4">Create a New Schedule</h2>
-        <form action="/admin/schedules" method="POST" data-parsley-validate>
+        <h2 class="text-center mb-4">Edit Schedule</h2>
+        <form action="/admin/schedules/{{schedule.id}}?_method=PUT" method="POST">
             <div class="form-group">
                 <label for="date" class="form-label">Date:</label>
-                <input type="date" id="date" name="date" class="form-control" required data-parsley-required-message="Please select a date.">
+                <input type="date" id="date" name="date" class="form-control" value="{{schedule.date}}" required>
             </div>
 
             <div class="form-group">
                 <label for="userName" class="form-label">User Name:</label>
-                <select name="userId" id="userName" class="form-control" required data-parsley-required-message="Please select a user.">
-                    <option value="" disabled selected>Select User</option>
+                <select name="userId" id="userName" class="form-control" required>
+                    <option value="" disabled>Select User</option>
                     {{#each users}}
-                    <option value="{{this.id}}">{{this.name}}</option>
+                    <option value="{{this.id}}" {{#ifCond this.id ../schedule.userId}} selected {{/ifCond}}>{{this.name}}</option>
                     {{/each}}
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="shiftName" class="form-label">Shift Name:</label>
-                <select name="shiftId" id="shiftName" class="form-control" required data-parsley-required-message="Please select a shift.">
-                    <option value="" disabled selected>Select Shift</option>
+                <select name="shiftId" id="shiftName" class="form-control" required>
+                    <option value="" disabled>Select Shift</option>
                     {{#each shifts}}
-                    <option value="{{this.id}}">{{this.name}}</option>
+                    <option value="{{this.id}}" {{#ifCond this.id ../schedule.shiftId}} selected {{/ifCond}}>{{this.name}}</option>
                     {{/each}}
                 </select>
             </div>
-
-            <button type="submit" class="mt-4 btn btn-primary">Submit</button>
+           
+            <button type="submit" class="mt-4 btn btn-primary">Edit</button>
         </form>
     </div>
 </div>

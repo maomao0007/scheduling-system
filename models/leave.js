@@ -11,9 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Leave.belongsTo(models.User, { foreignkey: 'userId' });
+      Leave.belongsTo(models.User, { foreignkey: "approvedById" });
     }
   }
   Leave.init({
+    name: DataTypes.STRING,
+    is_approved: DataTypes.BOOLEAN,
+    reason: DataTypes.TEXT,
+    approvedById: DataTypes.INTEGER,
+    approvedAt: DataTypes.DATE,
     startDate: DataTypes.DATEONLY,
     endDate: DataTypes.DATEONLY,
     userId: DataTypes.INTEGER

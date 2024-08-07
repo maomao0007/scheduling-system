@@ -19,6 +19,7 @@ const SESSION_SECRET = process.env.SESSION_SECRET;
 const { getUser } = require('./helpers/auth-helpers');
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/upload", express.static(path.join(__dirname, "upload")));
 // use Handlebars template engine, and specify the file extension as.hbs
 app.engine('hbs', engine({ extname: '.hbs', helpers: handlebarsHelpers }));
 // set Handlebars as the template engine

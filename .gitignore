@@ -32,3 +32,6 @@ npm-debug.log
 .DS_Store
 
 .env
+
+temp/
+upload/

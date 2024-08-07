@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <form action="/users/{{user.id}}?_method=PUT" method="POST" enctype="multipart/form-data" class="mt-3">
+            <div class="row align-items-center">
+              <div class="col-md-4 text-center">
+                <img class="img-fluid rounded-circle shadow profile-image" src="{{ user.image }}" alt="{{ user.name }}'s profile picture" onload="this.style.opacity=1" style="border-radius: 50%;">
+                <div class="mt-3">
+                  <label for="imageUpload" class="btn btn-outline-secondary btn-sm">Change Image</label>
+                  <input type="file" id="imageUpload" name="image" class="d-none">
+                </div>
+                <div class="mt-3">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <h3 class="mb-3 font-weight-bold text-primary">
+                  {{ user.name }}
+                  {{#if user.isAdmin}}
+                    <span class="text-warning ml-2">(Admin)</span>
+                  {{/if}}
+                </h3>
+                <p class="mb-2">
+                  <i class="fas fa-envelope mr-2 text-muted"></i>
+                  <a href="mailto:{{ user.email }}" class="text-decoration-none">{{ user.email }}</a>
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-id-card mr-2 text-muted"></i>
+                  <span class="text-secondary">ID: {{ user.id }}</span>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="text-left mt-3">
+        <a class="btn btn-outline-info" href="javascript:history.back()">Back</a>
+      </div>
+    </div>
+  </div>
+</div>

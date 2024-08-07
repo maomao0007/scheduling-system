@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('../config/passport'); 
+const upload = require('../middleware/multer') 
 
 const scheduleController = require('../controllers/schedule-controller'); 
 const leaveController = require('../controllers/leave-controller');
@@ -23,6 +24,9 @@ router.post(
 ); 
 router.get('/logout', userController.logout);
 
+router.get("/users/:id", authenticated, userController.getProfile);
+router.get("/users/:id/edit", authenticated, userController.getEditProfile);
+router.put("/users/:id", upload.single('image'), authenticated, userController.putProfile);
 router.get('/schedules', authenticated, scheduleController.getSchedules);
 router.get(
   '/applyLeaves',

@@ -2,7 +2,7 @@
 
  <div class="container mt-4">
         
-        <a href='/admin/schedules/create' class="btn btn-primary mb-3">New Schedule</a>
+        {{!-- <a href='/admin/schedules/create' class="btn btn-primary mb-3">New Schedule</a> --}}
    
         <div class="d-flex align-items-center mb-3">
         <a href="/admin/schedules/calendar" class="btn btn-outline-success mb-3" id="calendar-mode-link">
@@ -16,12 +16,11 @@
                 <tr>
                     <th>Schedule ID</th>
                     <th>Date</th>
-                    {{!-- <th>User ID</th>
-                    <th>Shift ID</th> --}}
                     <th>User Name</th>
                     <th>Shift Name</th>
                     <th>Shift Start Time</th>
                     <th>Shift End Time</th>
+                    <th>#</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,12 +28,13 @@
                 <tr>
                     <td>{{this.id}}</td>
                     <td>{{this.date}}</td>
-                    {{!-- <td>{{this.userId}}</td>
-                    <td>{{this.shiftId}}</td> --}}
                     <td>{{this.User.name}}</td>
                     <td>{{this.Shift.name}}</td>
                     <td>{{this.Shift.startTime}}</td>
                     <td>{{this.Shift.endTime}}</td>
+                    <td><a class="btn btn-outline-primary" href="/admin/schedules/{{this.id}}/edit">Edit</a>
+                    <form action="/admin/schedules/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm(`Are you sure you want to delete this data ?`)">Delete</button></form></td>
                 </tr>
                 {{/each}}
             </tbody>

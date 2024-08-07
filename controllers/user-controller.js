@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs'); 
 const { User } = require('../models');
+const { imgFileHandler } = require("../helpers/file-helpers");
 
 const userController = {
   signUpPage: (req, res) => {
@@ -42,6 +43,45 @@ const userController = {
         req.flash('success_messages', 'Successfully logged out！');
         res.redirect('/signin');
     });
+  },
+  getProfile: (req, res, next) => {
+    User.findByPk(req.params.id, {
+      raw: true
+    })
+    .then((user) => {
+      if(!user) throw new Error("This user does not exist!")
+      return res.render("users/profile", { user });
+    })
+    .catch((err) => next(err))
+  },
+   getEditProfile: async (req, res, next) => {
+     try{
+      const id = req.params.id
+      await User.findByPk(id, { raw: true })
+      
+      if (!id) throw new Error("This user does not exist !");
+      res.render("users/edit")
+
+     } catch(err) {
+    next(err)
+     }
+  },
+   putProfile: (req, res, next) => {
+    const { file } = req;
+    Promise.all([
+    User.findByPk(req.params.id), 
+    imgFileHandler(file)
+    ])
+      .then(([user, filePath]) => {
+        if (!user) throw new Error("This user does not exist!");
+        return user.update({
+          image: filePath || user.image
+        })
+      })
+      .then(() =>{
+        res.render("users/profile");
+      })
+      .catch((err) => next(err));
   }
 };
 module.exports = userController;

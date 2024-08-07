@@ -2,8 +2,12 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../../controllers/admin-controller');
 const shiftController = require("../../controllers/shift-controller");
+const ruleController = require("../../controllers/rule-controller");
 
 router.post("/schedules", adminController.postSchedule);
+router.put("/schedules/:id", adminController.putSchedule);
+router.get("/schedules/:id/edit", adminController.getEditSchedule);
+router.delete("/schedules/:id", adminController.deleteSchedule);
 router.get('/schedules', adminController.getSchedules);
 router.get("/schedules/create", adminController.createSchedule);
 router.get("/schedules/calendar", adminController.calendarSchedule);

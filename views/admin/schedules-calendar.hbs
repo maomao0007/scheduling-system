@@ -20,6 +20,10 @@
         </p>
       </div>
        <div class="modal-footer">
+        <a id="editLink" href="#" class="btn btn-primary">Edit</a>
+        <form id="deleteForm" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
@@ -29,6 +33,8 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
+    const eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+  
     
     // Embed the schedule data
     const schedules = {{{ json schedules }}};
@@ -42,17 +48,22 @@
         User: schedule.User.name,
         Shift: schedule.Shift.name,
         ShiftStartTime: schedule.Shift.startTime,
-        ShiftEndTime: schedule.Shift.endTime
+        ShiftEndTime: schedule.Shift.endTime,
+        Edit: schedule.id,
+        Delete: schedule.id
       }
     }));
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
+      firstDay: 1,
       events: events,
       eventClick: function(info) {
         // When an event is clicked, show the modal
-        const modal = new bootstrap.Modal(document.getElementById('eventModal'));
         const modalContent = document.getElementById('modalContent');
+        const editLink = document.getElementById('editLink');
+        const deleteForm = document.getElementById('deleteForm');
+        
         modalContent.innerHTML = `
           <p>Date: ${info.event.extendedProps.Date}</P>
           <p>Name: ${info.event.extendedProps.User}</p>
@@ -60,12 +71,38 @@
           <p>Shift Start Time: ${info.event.extendedProps.ShiftStartTime}</p>
           <p>Shift End Time: ${info.event.extendedProps.ShiftEndTime}</p>
         `;
-        modal.show();
+        editLink.href =`/admin/schedules/${info.event.extendedProps.Edit}/edit`
+        deleteForm.action = `/admin/schedules/${info.event.extendedProps.Delete}`
+        eventModal.show();
       }
     });
 
     calendar.render();
+
+    // Handle delete form submission
+  const deleteForm = document.getElementById('deleteForm');
+  
+  deleteForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (confirm('Are you sure you want to delete this data?')) {
+      fetch(this.action, {
+        method: 'DELETE',
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Schedule successfully deleted. Refreshing page...');
+          window.location.reload();
+        } else {
+          throw new Error('Failed to delete the schedule');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete the schedule. Please try again.');
+      });
+    }
   });
+});
 </script>
 
  <style>

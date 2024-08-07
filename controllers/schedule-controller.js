@@ -13,7 +13,7 @@ const scheduleController = {
       Shift.findAll({ raw: true }),
     ])
       console.log(schedules);
-      if (!schedules) throw new Error('This schedule did not exist.');
+      if (!schedules) throw new Error("This schedule does not exist.");
       return res.render('schedules', { schedules, users, shifts });
 
     } catch(err) { 
