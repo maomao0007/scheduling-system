@@ -38,11 +38,11 @@
               </select>
           </td>
           <td>
-              <label for="ApprovedBy" class="form-label">Approved By:</label>
-              <select id="ApprovedBy" name="ApprovedBy" class="form-control" required>
+              <label for="approvedById" class="form-label">Approved By:</label>
+              <select id="approvedById" name="approvedById" class="form-control" required>
                 <option value="" disabled selected>Select Approver</option>
                 {{#each admin}}
-                <option value="{{this.id}}" {{#ifCond ../leave.ApprovedBy this.id}}selected{{/ifCond}}>{{this.name}}</option>
+                <option value="{{this.id}}" {{#ifCond ../leave.approvedById this.id}}selected{{/ifCond}}>{{this.name}}</option>
                 {{/each}}
               </select>
           </td>

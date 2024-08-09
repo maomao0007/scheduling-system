@@ -59,6 +59,6 @@ module.exports = {
   },
   down: async (queryInterface, Sequelize) => {
     // 清空資料表中所有資料
-    await queryInterface.bulkDelete('Users', {});
+    await queryInterface.bulkDelete("Users", null, {});
   },
 };

@@ -264,26 +264,5 @@ const adminController = {
       next(err);
     }
   },
-  
-  postLeave: async (req, res, next) => {
-    if (!req.user || !req.user.isAdmin) throw new Error("Access denied");
-
-    try {
-      const { status, ApprovedBy } = req.body;
-      const id = req.params.id;
-      if (!status || !ApprovedBy) throw new Error("Missing required fields !");
-
-      await Leave.update(
-        { status, 
-          ApprovedBy, 
-          approvedAt: new Date() },
-        { where: { id } }
-      );
-      req.flash("success_messages", "Updated successfully !");
-      res.redirect("/admin/leaves");
-    } catch (err) {
-      next(err);
-    }
-  },
 };
 module.exports = adminController;
