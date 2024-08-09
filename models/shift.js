@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Shift.hasMany(models.Schedule, { foreignkey: "shiftId" });
+      Shift.hasMany(models.Schedule, { foreignKey: "shiftId" });
     }
   }
   Shift.init(

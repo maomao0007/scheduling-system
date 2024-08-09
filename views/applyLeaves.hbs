@@ -28,6 +28,22 @@
           </div>
         </div>
 
+        <div class="mb-3">
+          <label for="name" class="form-label">Leave Types:</label>
+          <select id="name" name="name" class="form-control" required>
+            <option value="" disabled selected>Select Type</option>
+            <option value="Annual Leave">Annual Leave</option>
+            <option value="Personal Leave">Personal Leave</option>
+            <option value="Sick Leave">Sick Leave</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="reason" class="form-label">Reason:</label>
+          <textarea id="reason" name="reason" class="form-control" rows="4" required></textarea>
+        </div>
+
         <div class="d-flex justify-content-between mt-4">
           <button class="btn btn-primary" type="submit" onclick="return confirmSubmission()">Submit Request</button>
           <a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
@@ -38,8 +54,13 @@
 </div>
 
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const today = new Date().toISOString().split('T')[0];
   const startDateInput = document.getElementById('startDate');
   const endDateInput = document.getElementById('endDate');
+
+  startDateInput.setAttribute('min', today);
+  endDateInput.setAttribute('min', today);
 
   startDateInput.addEventListener('change', function() {
     const startDate = this.value;
@@ -50,7 +71,7 @@
     const endDate = this.value;
     startDateInput.max = endDate;
   });
-
+})
   function confirmSubmission() {
     return confirm('Are you sure you want to submit this leave request?');
   }

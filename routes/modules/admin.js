@@ -13,6 +13,8 @@ router.get("/schedules/create", adminController.createSchedule);
 router.get("/schedules/calendar", adminController.calendarSchedule);
 router.patch("/users/:id", adminController.patchUser);
 router.get("/users", adminController.getUsers);
+router.post("/leaves/:id", adminController.postLeave);
+router.get("/leaves/:id", adminController.getLeave);
 router.get('/leaves', adminController.getLeaves);
 router.get("/shifts/:id", shiftController.getShifts);
 router.put("/shifts/:id", shiftController.putShift);

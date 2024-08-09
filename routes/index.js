@@ -34,6 +34,7 @@ router.get(
   leaveController.getApplyLeave
 );
 router.post('/applyLeaves', authenticated, leaveController.postApplyLeave);
+router.get("/leaves/status", authenticated, leaveController.getLeaveStatus);
 router.get(
   '/changeShifts',
   authenticated,

@@ -58,63 +58,70 @@ const adminController = {
   //     }
   // },
   postSchedule: async (req, res, next) => {
-    try{
+    try {
       const { date, userId, shiftId } = req.body;
       if (!date) throw new Error("Please select date !");
       if (!userId) throw new Error("Please select userId !");
       if (!shiftId) throw new Error("Please select shiftId !");
-    
-    // Check scheduling rules
-    const ruleViolation = await ruleController.checkShiftRules(userId, new Date(date), shiftId);
-    if (ruleViolation) {
-      req.flash("error_messages", ruleViolation);
+
+      // Check scheduling rules
+      const ruleViolation = await ruleController.checkShiftRules(
+        userId,
+        new Date(date),
+        shiftId
+      );
+      if (ruleViolation) {
+        req.flash("error_messages", ruleViolation);
+        return res.redirect("/admin/schedules");
+      }
+
+      await Schedule.create({
+        date,
+        userId,
+        shiftId,
+      });
+
+      req.flash("success_messages", "Schedule has been successfully created !");
       return res.redirect("/admin/schedules");
-    }
-    
-    await Schedule.create({
-      date,
-      userId,
-      shiftId,
-    })
-      
-    req.flash("success_messages", "Schedule has been successfully created !");
-    return res.redirect("/admin/schedules");
- 
-    } catch(err) {
-      next(err)
+    } catch (err) {
+      next(err);
     }
   },
   putSchedule: async (req, res, next) => {
     try {
-    const { date, userId, shiftId } = req.body;
-    const id = req.params.id;
+      const { date, userId, shiftId } = req.body;
+      const id = req.params.id;
 
-    if (!date) throw new Error("Please select the date !");
-    if (!userId) throw new Error("Please select userId !");
-    if (!shiftId) throw new Error("Please select shiftId !");
-    
-     // Check scheduling rules
-    const ruleViolation = await ruleController.checkShiftRules(userId, new Date(date), shiftId);
-    if (ruleViolation) {
-      req.flash("error_messages", ruleViolation);
-      return res.redirect("/admin/schedules");
-    }
+      if (!date) throw new Error("Please select the date !");
+      if (!userId) throw new Error("Please select userId !");
+      if (!shiftId) throw new Error("Please select shiftId !");
 
-    const schedule = await Schedule.findByPk(id)
-   
-    if (!schedule) throw new Error("This schedule does not exist.");
-    await schedule.update({
+      // Check scheduling rules
+      const ruleViolation = await ruleController.checkShiftRules(
+        userId,
+        new Date(date),
+        shiftId
+      );
+      if (ruleViolation) {
+        req.flash("error_messages", ruleViolation);
+        return res.redirect("/admin/schedules");
+      }
+
+      const schedule = await Schedule.findByPk(id);
+
+      if (!schedule) throw new Error("This schedule does not exist.");
+      await schedule.update({
         date,
         userId,
-        shiftId
-        })
+        shiftId,
+      });
 
-    req.flash( "success_messages", "Successfully updated !");
-    return res.redirect("/admin/schedules")
-  } catch(err) { 
-    next(err)
-  }
-},
+      req.flash("success_messages", "Successfully updated !");
+      return res.redirect("/admin/schedules");
+    } catch (err) {
+      next(err);
+    }
+  },
   getEditSchedule: (req, res, next) => {
     const id = req.params.id;
     Promise.all([
@@ -123,9 +130,6 @@ const adminController = {
       Shift.findAll({ raw: true }),
     ])
       .then(([schedule, users, shifts]) => {
-        console.log(schedule);
-        console.log(users);
-        console.log(shifts);
         if (!schedule) throw new Error("This schedule does not exist.");
         schedule.shiftId = Number(schedule.shiftId);
         return res.render("admin/edit-schedule", { schedule, users, shifts });
@@ -195,20 +199,91 @@ const adminController = {
       })
       .catch((err) => next(err));
   },
-  getLeaves: (req, res, next) => {
+  getLeaves: async (req, res, next) => {
     if (!req.user || !req.user.isAdmin) throw new Error("Access denied");
 
-    Leave.findAll({
-      include: [{ model: User, attributes: ["name", "email"] }],
-      order: [["createdAt", "DESC"]],
-      raw: true,
-      nest: true,
-    })
-      .then((leaves) => {
-        res.render("admin/leaves", { leaves });
-        console.log(leaves);
-      })
-      .catch((err) => next(err));
+    try {
+      const leaves = await Leave.findAll({
+        include: [
+          { model: User, as: "User" },
+          { model: User, as: "ApprovedBy" },
+        ],
+        order: [["createdAt", "ASC"]],
+        raw: true,
+        nest: true,
+      });
+      const admins = await User.findAll({
+        where: { isAdmin: true },
+        raw: true,
+      });
+      res.render("admin/leaves", { leaves, admins });
+    } catch (err) {
+      next(err);
+    }
+  },
+  getLeave: async (req, res, next) => {
+    if (!req.user || !req.user.isAdmin) throw new Error("Access denied");
+
+    try {
+      const id = req.params.id;
+      const leave = await Leave.findByPk(id, {
+        include: [
+          { model: User, as: "User" },
+          { model: User, as: "ApprovedBy" },
+        ],
+        raw: true,
+        nest: true,
+      });
+      if (!leave) throw new Error("Leave request not found !");
+
+      const admin = await User.findAll({
+        where: { isAdmin: true },
+        raw: true,
+      });
+      res.render("admin/leave", { leave, admin });
+    } catch (err) {
+      next(err);
+    }
+  },
+  postLeave: async (req, res, next) => {
+    if (!req.user || !req.user.isAdmin) throw new Error("Access denied");
+
+    try {
+      const { status, approvedById } = req.body;
+      const id = req.params.id;
+      if (!status || !approvedById)
+        throw new Error("Missing required fields !");
+
+      await Leave.update(
+        { status, approvedById, approvedAt: new Date() },
+        { where: { id } }
+      );
+      req.flash("success_messages", "Updated successfully !");
+      res.redirect("/admin/leaves");
+    } catch (err) {
+      next(err);
+    }
+  },
+  
+  postLeave: async (req, res, next) => {
+    if (!req.user || !req.user.isAdmin) throw new Error("Access denied");
+
+    try {
+      const { status, ApprovedBy } = req.body;
+      const id = req.params.id;
+      if (!status || !ApprovedBy) throw new Error("Missing required fields !");
+
+      await Leave.update(
+        { status, 
+          ApprovedBy, 
+          approvedAt: new Date() },
+        { where: { id } }
+      );
+      req.flash("success_messages", "Updated successfully !");
+      res.redirect("/admin/leaves");
+    } catch (err) {
+      next(err);
+    }
   },
 };
 module.exports = adminController;

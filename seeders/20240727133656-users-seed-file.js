@@ -6,7 +6,6 @@ module.exports = {
       'Users',
       [
         {
-          // 一次新增三筆資料
           email: 'root@example.com',
           password: await bcrypt.hash('123', 10),
           is_admin: true,

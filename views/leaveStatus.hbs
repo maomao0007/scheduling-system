@@ -1,44 +1,40 @@
-{{> admin-tabs route="leaves" }}
+{{> schedule-tabs route='leaveStatus'}}
 
 <div class="container mt-4">
-  <h2 class="mb-4">Leave Requests</h2>
+  <h2 class="mb-4">My Leave Requests</h2>
 
   <div class="table-responsive">
     <table class="table table-striped table-hover">
       <thead class="table-light">
         <tr>
           <th>#</th>
-          <th>User ID</th>
-          <th>Name</th>
-          <th>Email</th>
           <th>Start Date</th>
           <th>End Date</th>
-          <th>Leave Types</th>
+          <th>Leave Type</th>
           <th>Reason</th>
           <th>Status</th>
           <th>Approved By</th>
-          <th>Action</th>
         </tr>
       </thead>
       <tbody>
         {{#each leaves}}
         <tr>
-          <td>{{add @index 1}}</td>
-          <td>{{this.User.id}}</td>
-          <td>{{this.User.name}}</td>
-          <td>{{this.User.email}}</td>
+          <th>{{add @index 1}}</th>
           <td>{{this.startDate}}</td>
           <td>{{this.endDate}}</td>
           <td>{{this.name}}</td>
           <td>{{this.reason}}</td>
           <td>{{this.status}}</td>
           <td>{{this.ApprovedBy.name}}</td>
-          <td>
-            <a href="/admin/leaves/{{this.id}}" class="btn btn-primary">Check</a>
-          </td>
         </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
+
+  {{#unless leaves.length}}
+  <div class="alert alert-info" role="alert">
+    You haven't submitted any leave requests yet.
+  </div>
+  {{/unless}}
 </div>

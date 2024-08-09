@@ -54,7 +54,7 @@ const userController = {
     })
     .catch((err) => next(err))
   },
-   getEditProfile: async (req, res, next) => {
+  getEditProfile: async (req, res, next) => {
      try{
       const id = req.params.id
       await User.findByPk(id, { raw: true })
