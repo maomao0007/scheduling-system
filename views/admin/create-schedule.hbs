@@ -6,28 +6,20 @@
         <form action="/admin/schedules" method="POST" data-parsley-validate>
             <div class="form-group">
                 <label for="date" class="form-label">Date:</label>
-                <input type="date" id="date" name="date" class="form-control" required data-parsley-required-message="Please select a date.">
+                <input type="date" id="date" name="date" value="{{selectedDate}}" class="form-control" required data-parsley-required-message="Please select a date.">
             </div>
 
+            {{#each shifts}}
             <div class="form-group">
-                <label for="userName" class="form-label">User Name:</label>
-                <select name="userId" id="userName" class="form-control" required data-parsley-required-message="Please select a user.">
+                <label for="shift_{{this.id}}" class="form-label">{{this.name}}:</label>
+                <select name="shift_{{this.id}}" id="shift_{{this.id}}" class="form-control" required data-parsley-required-message="{{this.name}}">
                     <option value="" disabled selected>Select User</option>
-                    {{#each users}}
+                    {{#each ../users}}
                     <option value="{{this.id}}">{{this.name}}</option>
                     {{/each}}
                 </select>
             </div>
-
-            <div class="form-group">
-                <label for="shiftName" class="form-label">Shift Name:</label>
-                <select name="shiftId" id="shiftName" class="form-control" required data-parsley-required-message="Please select a shift.">
-                    <option value="" disabled selected>Select Shift</option>
-                    {{#each shifts}}
-                    <option value="{{this.id}}">{{this.name}}</option>
-                    {{/each}}
-                </select>
-            </div>
+            {{/each}}
 
             <button type="submit" class="mt-4 btn btn-primary">Submit</button>
         </form>
@@ -35,10 +27,10 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Get today's date in the format YYYY-MM-DD
+ document.addEventListener('DOMContentLoaded', function() {
     const today = new Date().toISOString().split('T')[0];
-    // Set the minimum date for the input field to today
-    document.getElementById('date').setAttribute('min', today);
-});
+    const dateInput = document.getElementById('date');
+    dateInput.setAttribute('min', today);
+  
+  });
 </script>

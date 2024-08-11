@@ -9,5 +9,16 @@ module.exports = {
   },
   add: function(a, b) {
     return a + b;
+  },
+  lookup: function (obj, field) {
+  return obj[field];
+  },
+  formatDate: function(date) {
+  return new Date(date).toLocaleDateString('en-SG', { 
+    weekday: 'long',
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  })
   }
 };

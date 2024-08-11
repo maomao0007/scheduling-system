@@ -9,36 +9,41 @@
                 <input type="date" id="date" name="date" class="form-control" value="{{schedule.date}}" required>
             </div>
 
+            {{#each shifts}}
             <div class="form-group">
-                <label for="userName" class="form-label">User Name:</label>
-                <select name="userId" id="userName" class="form-control" required>
-                    <option value="" disabled>Select User</option>
-                    {{#each users}}
-                    <option value="{{this.id}}" {{#ifCond this.id ../schedule.userId}} selected {{/ifCond}}>{{this.name}}</option>
-                    {{/each}}
+                <label for="shift_{{this.id}}" class="form-label">{{this.name}}:</label>
+                <select name="shift_{{this.id}}" id="shift_{{this.id}}" class="form-control" required>
+                <option value="" disabled{{#unless (lookup ../assignmentMap this.id)}}selected{{/unless}}>Select User</option>
+                {{#each ../users}}<option value="{{this.id}}"
+                {{#if (lookup ../../assignmentMap ../id)}}
+                {{#ifCond (lookup ../../assignmentMap ../id) this.id}}selected{{/ifCond}}
+            {{/if}}>
+            {{this.name}}
+        </option>
+        {{/each}}
                 </select>
             </div>
-
-            <div class="form-group">
-                <label for="shiftName" class="form-label">Shift Name:</label>
-                <select name="shiftId" id="shiftName" class="form-control" required>
-                    <option value="" disabled>Select Shift</option>
-                    {{#each shifts}}
-                    <option value="{{this.id}}" {{#ifCond this.id ../schedule.shiftId}} selected {{/ifCond}}>{{this.name}}</option>
-                    {{/each}}
-                </select>
-            </div>
+            {{/each}}
            
-            <button type="submit" class="mt-4 btn btn-primary">Edit</button>
+            <button type="submit" class="mt-4 btn btn-primary">Update</button>
         </form>
+    </div>
+  <div class="mt-5">
+        <h3>Other schedules for {{formatDate schedule.date}}:</h3>
+        <ul class="list-group">
+            {{#each allSchedulesForDay}}
+            {{#ifCond this.id ../schedule.id}}
+            {{else}}
+            <li class="list-group-item">{{this.Shift.name}} - {{this.User.name}}</li>
+            {{/ifCond}}
+            {{/each}}
+        </ul>
     </div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Get today's date in the format YYYY-MM-DD
+    document.addEventListener('DOMContentLoaded', function() {
     const today = new Date().toISOString().split('T')[0];
-    // Set the minimum date for the input field to today
     document.getElementById('date').setAttribute('min', today);
-});
+    });
 </script>

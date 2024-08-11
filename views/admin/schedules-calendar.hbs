@@ -74,7 +74,21 @@
         editLink.href =`/admin/schedules/${info.event.extendedProps.Edit}/edit`
         deleteForm.action = `/admin/schedules/${info.event.extendedProps.Delete}`
         eventModal.show();
-      }
+      },
+    dateClick: function(info) {
+    // Handle the logic when a date is clicked
+    const clickedDate = info.dateStr;
+    const existingSchedule = schedules.find(s => s.date === clickedDate);
+    
+    if (existingSchedule) {
+        // If there is already a schedule for that date, redirect to the edit page
+        window.location.href = `/admin/schedules/${existingSchedule.id}/edit`;
+    } else {
+        // If there is no schedule for that date, redirect to the create page
+        window.location.href = `/admin/schedules/create?date=${clickedDate}`;
+    }
+}
+
     });
 
     calendar.render();
