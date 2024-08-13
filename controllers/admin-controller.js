@@ -83,6 +83,7 @@ const adminController = {
     }
   },
   putSchedule: async (req, res, next) => {
+    
     try {
       const { date, ...shiftSelections } = req.body;
       const id = req.params.id;
@@ -114,7 +115,7 @@ const adminController = {
           date,
           shiftId,
           id // Pass the current schedule ID
-        );
+        )
         if (ruleViolation) {
           req.flash(
             "error_messages",
@@ -126,15 +127,19 @@ const adminController = {
         // Mark this user as assigned for this day
         assignedUsers.set(userId, shiftId);
 
-        // Update or create the schedule for this shift
-        await Schedule.upsert({
-          id: id, // This will update if exists, create if not
-          date,
-          userId,
-          shiftId,
+        // Check if there is an existing schedule, if not, create a new schedule
+        const existingSchedule = await Schedule.findOne({
+          where: { date, shiftId, id }
         });
-      }
 
+        if (existingSchedule) {
+        // Update the existing schedule
+        await Schedule.update({ userId }, { where: { id: existingSchedule.id } });
+        } else {
+        // Create a new schedule
+        await Schedule.create({ date, userId, shiftId });
+        }
+      }
       req.flash("success_messages", "Successfully updated!");
       return res.redirect("/admin/schedules/calendar");
     } catch (err) {
@@ -179,18 +184,19 @@ const adminController = {
       next(err);
     }
   },
-  deleteSchedule: (req, res, next) => {
-    const id = req.params.id;
-    Schedule.findByPk(id)
-      .then((schedule) => {
-        if (!schedule) throw new Error("This schedule does not exist.");
-        return schedule.destroy();
-      })
-      .then(() => {
+  deleteSchedule: async (req, res, next) => {
+    try{
+      const id = req.params.id;
+      const schedule = await Schedule.findByPk(id)
+        if (!schedule) throw new Error("This schedule does not exist.")
+        
+        await schedule.destroy();
         req.flash("success_messages", "Successfully deleted！");
-        return res.redirect("/admin/schedules");
-      })
-      .catch((err) => next(err));
+        return res.redirect("/admin/schedules/calendar");
+
+    } catch(err) {
+      next(err)
+    }
   },
   calendarSchedule: (req, res, next) => {
     return Promise.all([
@@ -203,9 +209,6 @@ const adminController = {
       Shift.findAll({ raw: true }),
     ])
       .then(([schedules, users, shifts]) => {
-        // console.log("Schedules:", schedules);
-        // console.log("Users:", users);
-        // console.log("Shifts:", shifts);
         return res.render("admin/schedules-calendar", {
           schedules,
           users,
