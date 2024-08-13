@@ -24,6 +24,7 @@ router.post(
 ); 
 router.get('/logout', userController.logout);
 
+router.get("/feeds", authenticated, userController.getFeeds);
 router.get("/users/:id", authenticated, userController.getProfile);
 router.get("/users/:id/edit", authenticated, userController.getEditProfile);
 router.put("/users/:id", upload.single('image'), authenticated, userController.putProfile);

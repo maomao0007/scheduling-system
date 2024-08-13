@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs'); 
-const { User } = require('../models');
+const { User, Schedule, Leave, Shift } = require('../models');
 const { imgFileHandler } = require("../helpers/file-helpers");
+const { relativeTimeFromNow } = require("../helpers/handlebars-helpers");
+const { NUMBER } = require('sequelize');
 
 const userController = {
   signUpPage: (req, res) => {
@@ -109,6 +111,38 @@ const userController = {
           user, // This is for the header
           profileUser, // This is for the profile
         });
+    } catch(err) {
+      next(err)
+    }
+  },
+  getFeeds: async (req, res, next) => {
+    try {
+     const id = req.user.id
+     const [user, schedules, leaves] = await Promise.all([
+       User.findByPk(id, { raw: true }),
+       Schedule.findAll({
+         where: { userId: id },
+         order: [["createdAt", "DESC"]],
+         include: [{ model: Shift, attributes: ["name"] }],
+         raw: true,
+         nest: true,
+       }),
+       Leave.findAll({
+         where: { userId: id },
+         order: [["createdAt", "ASC"]],
+         raw: true,
+       }),
+     ]);
+      // console.log("User:", user);
+      // console.log("Schedules:", schedules);
+      // console.log("Leaves:", leaves);
+      
+    const hasNotifications = schedules.length > 0 || leaves.length > 0; if (!hasNotifications) { 
+    req.flash('info', 'There are no notifications.'); 
+    return res.redirect('/schedules/calendar')
+    }
+
+    res.render("feeds", { user, schedules, leaves });
     } catch(err) {
       next(err)
     }

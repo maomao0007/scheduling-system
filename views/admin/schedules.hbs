@@ -25,7 +25,7 @@
                 {{#each schedules}}
                 <tr>
                     <td>{{this.id}}</td>
-                    <td>{{this.date}}</td>
+                    <td>{{formatDate this.date}}</td>
                     <td>{{this.User.name}}</td>
                     <td>{{this.Shift.name}}</td>
                     <td>{{this.Shift.startTime}}</td>

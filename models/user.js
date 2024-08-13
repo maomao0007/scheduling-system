@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       User.hasMany(models.Schedule, { foreignKey: 'userId' });
-      User.hasMany(models.Leave, { foreignKey: 'userId', as: 'User' });
+      User.hasMany(models.Leave, { foreignKey: 'userId', as: 'Leaves' });
       User.hasMany(models.Leave, { foreignKey: "approvedById", as: "ApprovedBy" });
     }
   }

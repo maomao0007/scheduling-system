@@ -14,37 +14,35 @@ const adminController = {
       Shift.findAll({ raw: true }),
     ])
       .then(([schedules, users, shifts]) => {
-        console.log(schedules);
         return res.render("admin/schedules", { schedules, users, shifts });
       })
       .catch((err) => next(err));
   },
   createSchedule: async (req, res, next) => {
     try {
-    const { date } = req.query;
-    const [schedules, users, shifts] = await Promise.all([
-      Schedule.findAll({
-        include: ["User", "Shift"],
-        raw: true,
-        nest: true,
-      }),
-      User.findAll({ raw: true }),
-      Shift.findAll({ raw: true }),
-    ])
-    
-        console.log("Schedules:", schedules);
-        console.log("Users:", users);
-        console.log("Shifts:", shifts);
-        return res.render("admin/create-schedule", {
-          schedules,
-          users,
-          shifts,
-          selectedDate: date,
-        })
-    }
-      catch (err) {
+      const { date } = req.query;
+      const [schedules, users, shifts] = await Promise.all([
+        Schedule.findAll({
+          include: ["User", "Shift"],
+          raw: true,
+          nest: true,
+        }),
+        User.findAll({ raw: true }),
+        Shift.findAll({ raw: true }),
+      ]);
+
+      console.log("Schedules:", schedules);
+      console.log("Users:", users);
+      console.log("Shifts:", shifts);
+      return res.render("admin/create-schedule", {
+        schedules,
+        users,
+        shifts,
+        selectedDate: date,
+      });
+    } catch (err) {
       next(err);
-   }
+    }
   },
   postSchedule: async (req, res, next) => {
     try {
@@ -75,99 +73,112 @@ const adminController = {
         await Schedule.create({ date, userId, shiftId });
       }
 
-      // If we've made it here, all schedules were created successfully
       req.flash(
         "success_messages",
         "All schedules have been successfully created!"
       );
-      return res.redirect("/admin/schedules");
-
+      return res.redirect("/admin/schedules/calendar");
     } catch (err) {
       next(err);
     }
   },
   putSchedule: async (req, res, next) => {
     try {
-      const { date, userId, shiftId } = req.body;
+      const { date, ...shiftSelections } = req.body;
       const id = req.params.id;
 
-      if (!date) throw new Error("Please select the date !");
-      if (!userId) throw new Error("Please select userId !");
-      if (!shiftId) throw new Error("Please select shiftId !");
-
-      // Check scheduling rules
-      const ruleViolation = await ruleController.checkShiftRules(
-        userId,
-        new Date(date),
-        shiftId
-      );
-      if (ruleViolation) {
-        req.flash("error_messages", ruleViolation);
-        return res.redirect("/admin/schedules");
-      }
+      if (!date) throw new Error("Please select the date!");
 
       const schedule = await Schedule.findByPk(id);
-
       if (!schedule) throw new Error("This schedule does not exist.");
-      await schedule.update({
-        date,
-        userId,
-        shiftId,
-      });
 
-      req.flash("success_messages", "Successfully updated !");
-      return res.redirect("/admin/schedules");
+      // Create a map to track assigned users for the day
+      const assignedUsers = new Map();
+
+      for (const [shiftKey, userId] of Object.entries(shiftSelections)) {
+        if (!userId) continue;
+        const shiftId = shiftKey.split("_")[1];
+
+        // Check if this user is already assigned to another shift on this day
+        if (assignedUsers.has(userId)) {
+          req.flash(
+            "error_messages",
+            `User is already assigned to another shift on this day.`
+          );
+          return res.redirect("/admin/schedules/calendar");
+        }
+
+        // Check scheduling rules
+        const ruleViolation = await ruleController.checkShiftRules(
+          userId,
+          date,
+          shiftId,
+          id // Pass the current schedule ID
+        );
+        if (ruleViolation) {
+          req.flash(
+            "error_messages",
+            `${ruleViolation} (Shift ID: ${shiftId})`
+          );
+          return res.redirect("/admin/schedules/calendar");
+        }
+
+        // Mark this user as assigned for this day
+        assignedUsers.set(userId, shiftId);
+
+        // Update or create the schedule for this shift
+        await Schedule.upsert({
+          id: id, // This will update if exists, create if not
+          date,
+          userId,
+          shiftId,
+        });
+      }
+
+      req.flash("success_messages", "Successfully updated!");
+      return res.redirect("/admin/schedules/calendar");
     } catch (err) {
       next(err);
     }
   },
   getEditSchedule: async (req, res, next) => {
-   try {
-     const id = req.params.id;
-     const schedule = await Schedule.findByPk(id, {
-       include: [{ model: User }, { model: Shift }],
-       raw: true,
-       nest: true,
-     });
+    try {
+      const id = req.params.id;
+      const schedule = await Schedule.findByPk(id, {
+        include: [{ model: User }, { model: Shift }],
+        raw: true,
+        nest: true,
+      });
 
-     if (!schedule) throw new Error("This schedule does not exist.");
+      if (!schedule) throw new Error("This schedule does not exist.");
+      const [users, shifts, allSchedulesForDay] = await Promise.all([
+        User.findAll({ raw: true }),
+        Shift.findAll({ raw: true }),
+        Schedule.findAll({
+          where: { date: schedule.date },
+          include: [{ model: User }, { model: Shift }],
+          raw: true,
+          nest: true,
+        }),
+      ]);
 
-     // Get all schedules for the same day
-     const allSchedulesForDay = await Schedule.findAll({
-       where: { date: schedule.date },
-       include: [{ model: User }, { model: Shift }],
-       raw: true,
-       nest: true,
-     });
+      const assignmentMap = {};
+      allSchedulesForDay.forEach((sch) => {
+        if (sch.Shift && sch.User) {
+          assignmentMap[sch.Shift.id] = sch.User.id;
+        }
+      });
 
-    const assignmentMap = {};
-    allSchedulesForDay.forEach((sch) => {
-      if (sch.Shift && sch.User) {
-        assignmentMap[sch.Shift.id] = sch.User.id;
-      }
-    });
-
-     const [users, shifts] = await Promise.all([
-       User.findAll({raw: true}),
-       Shift.findAll({raw: true}),
-     ]);
-     console.log("Schedule:", schedule);
-     console.log("All Schedules for Day:", allSchedulesForDay);
-     console.log("Users:", users);
-     console.log("Shifts:", shifts);
-     console.log("Assignment Map:", assignmentMap);
-
-     return res.render("admin/edit-schedule", {
-       schedule,
-       allSchedulesForDay,
-       users,
-       shifts,
-       assignmentMap,
-     });
-   } catch (err) {
-     next(err);
-   }
-},
+      return res.render("admin/edit-schedule", {
+        schedule,
+        users,
+        shifts,
+        assignmentMap,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
   deleteSchedule: (req, res, next) => {
     const id = req.params.id;
     Schedule.findByPk(id)
@@ -181,28 +192,6 @@ const adminController = {
       })
       .catch((err) => next(err));
   },
-  // bulkCreateSchedules: async (req, res, next) => {
-  //   try {
-  //     const { date, assignments } = req.body;
-
-  //     for (const [shiftId, userId] of Object.entries(assignments)) {
-  //       if (userId) {
-  //         await Schedule.findOrCreate({
-  //           where: { date, shiftId },
-  //           defaults: { userId },
-  //         });
-  //       }
-  //     }
-
-  //     req.flash(
-  //       "success_messages",
-  //       "Schedules have been successfully created!"
-  //     );
-  //     res.redirect("/admin/schedules");
-  //   } catch (err) {
-  //     next(err);
-  //   }
-  // },
   calendarSchedule: (req, res, next) => {
     return Promise.all([
       Schedule.findAll({

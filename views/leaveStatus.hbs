@@ -20,8 +20,8 @@
         {{#each leaves}}
         <tr>
           <th>{{add @index 1}}</th>
-          <td>{{this.startDate}}</td>
-          <td>{{this.endDate}}</td>
+          <td>{{formatDate this.startDate}}</td>
+          <td>{{formatDate this.endDate}}</td>
           <td>{{this.name}}</td>
           <td>{{this.reason}}</td>
           <td>{{this.status}}</td>

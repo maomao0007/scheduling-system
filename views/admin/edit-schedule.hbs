@@ -28,17 +28,6 @@
             <button type="submit" class="mt-4 btn btn-primary">Update</button>
         </form>
     </div>
-  <div class="mt-5">
-        <h3>Other schedules for {{formatDate schedule.date}}:</h3>
-        <ul class="list-group">
-            {{#each allSchedulesForDay}}
-            {{#ifCond this.id ../schedule.id}}
-            {{else}}
-            <li class="list-group-item">{{this.Shift.name}} - {{this.User.name}}</li>
-            {{/ifCond}}
-            {{/each}}
-        </ul>
-    </div>
 </div>
 
 <script>
