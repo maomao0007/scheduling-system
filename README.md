@@ -138,5 +138,5 @@ This project requires the following software to be installed:
 - "passport-local": "^1.0.0"
 - "sequelize": "^6.37.3"
 - "sequelize-cli": "^6.6.2"
-- 
+
 ## Screenshot
