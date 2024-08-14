@@ -115,29 +115,28 @@ This project requires the following software to be installed:
    - user5@example.com (Password: 123)
 
 ## Development Tools
-
-"@fullcalendar/interaction": "^6.1.15",
-"bcryptjs": "^2.4.3",
-"connect-flash": "^0.1.1",
-"date-fns": "^3.6.0",
-"dayjs": "^1.11.12",
-"dotenv": "^16.4.5",
-"eslint": "^9.7.0",
-"express": "^4.19.2",
-"express-handlebars": "^7.1.3",
-"express-session": "^1.18.0",
-"faker": "^6.6.6",
-"fullcalendar": "^6.1.15",
-"handlebars-helper": "^0.0.12",
-"jsonwebtoken": "^9.0.2",
-"method-override": "^3.0.0",
-"multer": "^1.4.5-lts.1",
-"mysql2": "^3.10.3",
-"nodemon": "^3.1.0",
-"passport": "^0.7.0",
-"passport-jwt": "^4.0.1",
-"passport-local": "^1.0.0",
-"sequelize": "^6.37.3",
-"sequelize-cli": "^6.6.2"
-
+- "@fullcalendar/interaction": "^6.1.15"
+- "bcryptjs": "^2.4.3"
+- "connect-flash": "^0.1.1"
+- "date-fns": "^3.6.0"
+- "dayjs": "^1.11.12"
+- "dotenv": "^16.4.5"
+- "eslint": "^9.7.0"
+- "express": "^4.19.2"
+- "express-handlebars": "^7.1.3"
+- "express-session": "^1.18.0"
+- "faker": "^6.6.6"
+- "fullcalendar": "^6.1.15"
+- "handlebars-helper": "^0.0.12"
+- "jsonwebtoken": "^9.0.2"
+- "method-override": "^3.0.0"
+- "multer": "^1.4.5-lts.1"
+- "mysql2": "^3.10.3"
+- "nodemon": "^3.1.0"
+- "passport": "^0.7.0"
+- "passport-jwt": "^4.0.1"
+- "passport-local": "^1.0.0"
+- "sequelize": "^6.37.3"
+- "sequelize-cli": "^6.6.2"
+- 
 ## Screenshot
