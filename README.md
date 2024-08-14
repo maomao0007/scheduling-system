@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This web-based scheduling system provides a comprehensive platform for both administrators and users to efficiently manage schedules. The system is designed with a default configuration of three shifts per day, accommodating one user per shift, with a total capacity for five users and one administrator.
+This web-based scheduling system provides a comprehensive platform for both administrators and users to efficiently manage schedules. The system is designed with a default configuration of three shifts per day, accommodating one user per shift, with a total capacity for six users and one administrator.
 
 ## Key Features
 
@@ -35,7 +35,7 @@ This web-based scheduling system provides a comprehensive platform for both admi
 ## System Configuration
 
 - Default setup: 3 shifts per day
-- Capacity: 5 users + 1 administrator
+- Capacity: 6 users + 1 administrator
 - 1 user assigned per shift
 
 ## Technical Highlights
@@ -113,6 +113,7 @@ This project requires the following software to be installed:
    - user3@example.com (Password: 123)
    - user4@example.com (Password: 123)
    - user5@example.com (Password: 123)
+   - user6@example.com (Password: 123)
 
 ## Development Tools
 - "@fullcalendar/interaction": "^6.1.15"
