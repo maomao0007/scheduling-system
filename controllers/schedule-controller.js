@@ -3,6 +3,7 @@ const { Schedule, User, Shift } = require('../models');
 const scheduleController = {
   getSchedules: async (req, res, next) => {
    try{
+    const userId = req.user.id
     const [schedules, users, shifts] = await Promise.all([
     Schedule.findAll({
       include:  ['User', 'Shift'],
@@ -13,7 +14,7 @@ const scheduleController = {
       Shift.findAll({ raw: true }),
     ]);
       if (!schedules) throw new Error('This schedule does not exist.');
-      return res.render('schedules', { id, schedules, users, shifts });
+      return res.render('schedules', { id: userId, schedules, users, shifts });
 
     } catch(err) { 
       next(err);}

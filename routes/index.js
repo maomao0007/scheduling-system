@@ -29,7 +29,7 @@ router.get('/users/:id', authenticated, userController.getProfile);
 router.get('/users/:id/edit', authenticated, userController.getEditProfile);
 router.put('/users/:id', upload.single('image'), authenticated, userController.putProfile);
 router.get('/schedules', authenticated, scheduleController.getSchedules);
-router.get('/schedules/lists', authenticated, scheduleController.getSchedule);
+router.get("/schedules/:id", authenticated, scheduleController.getSchedule);
 router.get(
   '/applyLeaves',
   authenticated,
