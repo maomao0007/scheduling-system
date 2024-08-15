@@ -1,5 +1,5 @@
 // Import the fs module
-const fs = require("fs");
+const fs = require('fs');
 // file is the file processed by multer
 const imgFileHandler = (file) => {
   return new Promise((resolve, reject) => {

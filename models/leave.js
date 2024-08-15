@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Leave.belongsTo(models.User, { foreignKey: 'userId', as:'User' });
-      Leave.belongsTo(models.User, { foreignKey: "approvedById", as: "ApprovedBy" });
+      Leave.belongsTo(models.User, { foreignKey: 'approvedById', as: 'ApprovedBy' });
     }
   }
   Leave.init({

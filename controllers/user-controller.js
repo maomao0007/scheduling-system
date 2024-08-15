@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs'); 
 const { User, Schedule, Leave, Shift } = require('../models');
-const { imgFileHandler } = require("../helpers/file-helpers");
-const { relativeTimeFromNow } = require("../helpers/handlebars-helpers");
+const { imgFileHandler } = require('../helpers/file-helpers');
+const { relativeTimeFromNow } = require('../helpers/handlebars-helpers');
 const { NUMBER } = require('sequelize');
 
 const userController = {
@@ -47,7 +47,7 @@ const userController = {
     });
   },
   getProfile: (req, res, next) => {
-    const id = req.user.id
+    const id = req.user.id;
     const profileUserId = req.params.id;
     Promise.all([
       User.findByPk(id, { raw: true }),
@@ -55,8 +55,8 @@ const userController = {
     ])
 
       .then(([user, profileUser]) => {
-        if (!profileUser) throw new Error("This user does not exist!");
-        return res.render("users/profile", {
+        if (!profileUser) throw new Error('This user does not exist!');
+        return res.render('users/profile', {
           user, // This is for the header
           profileUser, // This is for the profile
         });
@@ -65,36 +65,36 @@ const userController = {
 },
   getEditProfile: async (req, res, next) => {
      try{
-      const id = req.user.id
-      const profileUserId = req.params.id 
+      const id = req.user.id;
+      const profileUserId = req.params.id; 
 
       const [user, profileUser] = await Promise.all([
         User.findByPk(id, { raw: true }),
         User.findByPk(profileUserId, { raw: true }),
-      ])
-      if (!profileUser) { throw new Error("This user does not  exist !")
+      ]);
+      if (!profileUser) { throw new Error('This user does not  exist !');
       }
       if (Number(id) !== Number(profileUserId)) {
-        throw new Error("You don't have permission to edit this profile!");
+        throw new Error('You don\'t have permission to edit this profile!');
       }
 
-      res.render("users/edit", {
+      res.render('users/edit', {
         user, // This is for the header
         profileUser, // This is for the profile
       });
 
      } catch(err) {
-    next(err)
+    next(err);
      }
   },
    putProfile: async (req, res, next) => {
     try {
     const { file } = req;
-    const id = req.user.id
-    const profileUserId = req.params.id 
+    const id = req.user.id;
+    const profileUserId = req.params.id; 
     
     if (Number(id) !== Number(profileUserId)) {
-      throw new Error("You don't have permission to edit this profile!");
+      throw new Error('You don\'t have permission to edit this profile!');
     }
     const [user, profileUser, filePath] = await Promise.all([
       User.findByPk(id,{ raw: true }),
@@ -102,34 +102,34 @@ const userController = {
       imgFileHandler(file)
     ]);
 
-    if (!profileUser) throw new Error("This user does not exist !");
+    if (!profileUser) throw new Error('This user does not exist !');
     
     await profileUser.update({
       image: filePath || profileUser.image,
        });
-        res.render("users/profile", {
+        res.render('users/profile', {
           user, // This is for the header
           profileUser, // This is for the profile
         });
     } catch(err) {
-      next(err)
+      next(err);
     }
   },
   getFeeds: async (req, res, next) => {
     try {
-     const id = req.user.id
+     const id = req.user.id;
      const [user, schedules, leaves] = await Promise.all([
        User.findByPk(id, { raw: true }),
        Schedule.findAll({
          where: { userId: id },
-         order: [["createdAt", "DESC"]],
-         include: [{ model: Shift, attributes: ["name"] }],
+         order: [['createdAt', 'DESC']],
+         include: [{ model: Shift, attributes: ['name'] }],
          raw: true,
          nest: true,
        }),
        Leave.findAll({
          where: { userId: id },
-         order: [["createdAt", "ASC"]],
+         order: [['createdAt', 'ASC']],
          raw: true,
        }),
      ]);
@@ -139,12 +139,12 @@ const userController = {
       
     const hasNotifications = schedules.length > 0 || leaves.length > 0; if (!hasNotifications) { 
     req.flash('info', 'There are no notifications.'); 
-    return res.redirect('/schedules/calendar')
+    return res.redirect('/schedules/calendar');
     }
 
-    res.render("feeds", { user, schedules, leaves });
+    res.render('feeds', { user, schedules, leaves });
     } catch(err) {
-      next(err)
+      next(err);
     }
   }
 };

@@ -53,11 +53,19 @@ module.exports = {
           created_at: new Date(),
           updated_at: new Date(),
         },
+        {
+          email: 'user6@example.com',
+          password: await bcrypt.hash('123', 10),
+          is_admin: false,
+          name: 'user6',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ],
       {}
     );
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("Users", null, {});
+    await queryInterface.bulkDelete('Users', null, {});
   },
 };

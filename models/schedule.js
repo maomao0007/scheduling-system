@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Schedule.belongsTo(models.User, { foreignKey: 'userId' });
-      Schedule.belongsTo(models.Shift, { foreignKey: "shiftId" });
+      Schedule.belongsTo(models.Shift, { foreignKey: 'shiftId' });
     }
   }
   Schedule.init(
@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Schedule",
-      tableName: "Schedules",
+      modelName: 'Schedule',
+      tableName: 'Schedules',
       underscored: true,
     }
   );

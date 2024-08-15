@@ -6,12 +6,12 @@ const leaveController = {
   },
   postApplyLeave: (req, res, next) => {
     const { startDate, endDate, name, reason } = req.body;
-    if (!startDate || !endDate) throw new Error("Please select the date !");
-    if (startDate > endDate) throw new Error("Please select the correct date !");
+    if (!startDate || !endDate) throw new Error('Please select the date !');
+    if (startDate > endDate) throw new Error('Please select the correct date !');
       Leave.create({ userId: req.user.id, startDate, endDate, name, reason })
         .then(() => {
-          req.flash("success_messages", "Submitted successfully");
-          res.redirect("/applyLeaves");
+          req.flash('success_messages', 'Submitted successfully');
+          res.redirect('/applyLeaves');
           // console.log("User ID:", req.user.id);
           // console.log("Request Body:", req.body);
         })
@@ -22,14 +22,14 @@ const leaveController = {
       const leaves = await Leave.findAll({
         where: { userId: req.user.id },
         include: [
-          { model: User, as: "User" },
-          { model: User, as: "ApprovedBy" },
+          { model: User, as: 'User' },
+          { model: User, as: 'ApprovedBy' },
         ],
-        order: [["createdAt", "ASC"]],
+        order: [['createdAt', 'ASC']],
         nest: true,
         raw: true
       });
-      res.render("leaveStatus", { leaves });
+      res.render('leaveStatus', { leaves });
     } catch (err) {
       next(err);
     }

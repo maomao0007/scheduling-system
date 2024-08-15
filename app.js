@@ -5,7 +5,7 @@ const express = require('express');
 const path = require('path');
 const routes = require('./routes');
 const { engine } = require('express-handlebars');
-const methodOverride = require("method-override");
+const methodOverride = require('method-override');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,8 +18,8 @@ const session = require('express-session');
 const SESSION_SECRET = process.env.SESSION_SECRET;
 const { getUser } = require('./helpers/auth-helpers');
 
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/upload", express.static(path.join(__dirname, "upload")));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/upload', express.static(path.join(__dirname, 'upload')));
 // use Handlebars template engine, and specify the file extension as.hbs
 app.engine('hbs', engine({ extname: '.hbs', helpers: handlebarsHelpers }));
 // set Handlebars as the template engine
@@ -27,7 +27,7 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 
-app.use(methodOverride("_method"));
+app.use(methodOverride('_method'));
 app.use(
   session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false })
 );
