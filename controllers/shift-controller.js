@@ -1,6 +1,6 @@
 const { Shift } = require('../models');
 
-const shiftServices = {
+const shiftController = {
   getShifts: (req, res, next) => {
     return Promise.all([
       Shift.findAll({ raw: true }),
@@ -43,4 +43,4 @@ const shiftServices = {
       .catch((err) => next(err));
   },
 };
-module.exports = shiftServices;
+module.exports = shiftController;

@@ -1,0 +1,76 @@
+{{> schedule-tabs route='swapSchedules'}}
+
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Swap Schedules Request</h3>
+    </div>
+    <div class="card-body">
+      <form action="/swap-schedules" method="POST">
+        <div class="mb-3">
+          <label class="form-label">Name:</label>
+          <input type="text" class="form-control" value="{{user.name}}" readonly>
+        </div> 
+
+         <div class="mb-3">
+          <label class="form-label">Email:</label>
+          <input type="text" class="form-control" value="{{user.email}}" readonly>
+        </div> 
+        
+        <div class="mb-3">
+          <label class="form-label">Shift Start Date:</label>
+          <input id="startDate" type="date" name="startDate" class="form-control" required>
+        </div> 
+
+        <div class="mb-3">
+          <label class="form-label">Shift End Date:</label>
+          <input id="endDate" type="date" name="endDate" class="form-control" required>
+        </div> 
+
+        <div class="mb-3">
+          <label class="form-label">Select Colleague to Swap With:</label>
+          <select id="colleagueSelect" name="colleagueId" class="form-control" required>
+            <option value="" disabled selected>Select a colleague</option>
+            {{#each users}}
+               {{#ifCond this.id ../user.id}}
+               {{!-- Do not display current user --}}
+               {{else}}
+              <option value="{{this.id}}">{{this.name}} ( ID: {{this.id}} )</option>
+               {{/ifCond}}
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="reason" class="form-label">Reason:</label>
+          <textarea id="reason" name="reason" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button class="btn btn-primary" type="submit" onclick="return confirmSubmission()">Submit Request</button>
+          <a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  const startDateInput = document.getElementById('startDate');
+  const endDateInput = document.getElementById('endDate');
+
+  startDateInput.addEventListener('change', function() {
+    const StartDate = this.value;
+    currentEndDateInput.min = currentStartDate;
+  });
+
+  currentEndDateInput.addEventListener('change', function() {
+    const currentEndDate = this.value;
+    startDateInput.max = currentEndDate;
+  });
+
+  function confirmSubmission() {
+    return confirm('Are you sure you want to submit this shift change request?');
+  }
+</script>

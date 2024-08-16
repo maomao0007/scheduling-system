@@ -21,5 +21,9 @@ router.put('/shifts/:id', shiftController.putShift);
 router.delete('/shifts/:id', shiftController.deleteShift);
 router.post('/shifts', shiftController.postShift);
 router.get('/shifts', shiftController.getShifts);
+router.post("/swap-schedules/:id", adminController.postSwap);
+router.get("/swap-schedules/:id", adminController.getSwap);
+router.get("/swap-schedules", adminController.getSwaps);
+
 router.use('/', (req, res) => res.redirect('/admin/schedules/calendar'));
 module.exports = router;

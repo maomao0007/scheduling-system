@@ -13,6 +13,15 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Schedule, { foreignKey: 'userId' });
       User.hasMany(models.Leave, { foreignKey: 'userId', as: 'Leaves' });
       User.hasMany(models.Leave, { foreignKey: 'approvedById', as: 'ApprovedBy' });
+      User.hasMany(models.Swap, { foreignKey: "userId", as: "RequestedSwaps" });
+      User.hasMany(models.Swap, {
+        foreignKey: "approvedById",
+        as: "ApprovedSwaps",
+      });
+      User.hasMany(models.Swap, {
+        foreignKey: "colleagueId",
+        as: "ColleagueSwaps",
+      });
     }
   }
   User.init({

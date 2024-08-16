@@ -5,7 +5,7 @@ const upload = require('../middleware/multer');
 
 const scheduleController = require('../controllers/schedule-controller'); 
 const leaveController = require('../controllers/leave-controller');
-const changeShiftController = require('../controllers/changeShift-controller');
+const swapSchedulesController = require("../controllers/swapSchedules-controller");
 const userController = require('../controllers/user-controller'); 
 const { authenticated, authenticatedAdmin } = require('../middleware/auth'); 
 const { generalErrorHandler } = require('../middleware/error-handler');
@@ -30,6 +30,21 @@ router.get('/users/:id/edit', authenticated, userController.getEditProfile);
 router.put('/users/:id', upload.single('image'), authenticated, userController.putProfile);
 router.get('/schedules', authenticated, scheduleController.getSchedules);
 router.get("/schedules/:id", authenticated, scheduleController.getSchedule);
+router.post(
+  "/swap-schedules",
+  authenticated,
+  swapSchedulesController.postSwapSchedules
+);
+router.get(
+  "/swap-schedules",
+  authenticated,
+  swapSchedulesController.getSwapSchedules
+);
+router.get(
+  "/swap-schedules/status",
+  authenticated,
+  swapSchedulesController.getSwapStatus
+);
 router.get(
   '/applyLeaves',
   authenticated,
@@ -37,11 +52,6 @@ router.get(
 );
 router.post('/applyLeaves', authenticated, leaveController.postApplyLeave);
 router.get('/leaves/status', authenticated, leaveController.getLeaveStatus);
-router.get(
-  '/changeShifts',
-  authenticated,
-  changeShiftController.getChangeShift
-);
 router.use('/', (req, res) => res.redirect('/schedules'));
 router.use('/', generalErrorHandler); 
 

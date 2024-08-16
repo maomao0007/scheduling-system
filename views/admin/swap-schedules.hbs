@@ -1,0 +1,44 @@
+{{> admin-tabs route="swapSchedules" }}
+
+<div class="container mt-4">
+  <h2 class="mb-4">Swap Schedules Requests</h2>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Start Shift Date</th>
+          <th>End Shift Date</th>
+          <th>Swap With</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Approved By</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each swaps}}
+        <tr>
+          <th>{{add @index 1}}</th>
+          <td>{{this.Requester.id}}</td>
+          <td>{{this.Requester.name}}</td>
+          <td>{{this.Requester.email}}</td>
+          <td>{{formatDate this.startDate}}</td>
+          <td>{{formatDate this.endDate}}</td>
+          <td>{{this.Colleague.name}}</td>
+          <td>{{this.reason}}</td>
+          <td>{{this.status}}</td>
+          <td>{{this.Approver.name}}</td>
+          <td>
+            <a href="/admin/swap-schedules/{{this.id}}" class="btn btn-primary">Check</a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>

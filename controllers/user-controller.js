@@ -133,10 +133,7 @@ const userController = {
          raw: true,
        }),
      ]);
-      // console.log("User:", user);
-      // console.log("Schedules:", schedules);
-      // console.log("Leaves:", leaves);
-      
+  
     const hasNotifications = schedules.length > 0 || leaves.length > 0; if (!hasNotifications) { 
     req.flash('info', 'There are no notifications.'); 
     return res.redirect('/schedules/calendar');
