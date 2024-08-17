@@ -11,8 +11,9 @@ This web-based scheduling system provides a comprehensive platform for both admi
 - **Schedule Management**: 
   - View schedules in list or calendar mode
   - Edit and delete schedules directly from the list interface
-  - Create, edit, and delete schedules directly from the calendar interface
+  - Create, edit and delete schedules directly from the calendar interface
   - Manage new shifts and review user leave requests
+  - Review and approve shift exchange requests
 
 - **User Management**:
   - Modify user access rights
@@ -24,13 +25,14 @@ This web-based scheduling system provides a comprehensive platform for both admi
   - View personal schedules
   - Submit leave requests
   - Track leave request status
+  - Submit shift exchange requests
 
 - **Profile Customization**:
   - Upload and manage personal avatar
 
 - **Notification System**:
   - Access a dashboard for the latest updates
-  - Receive notifications for schedule changes and leave request status updates
+  - Receive notifications for schedule changes, leave request status updates and shift exchange request updates
 
 ## System Configuration
 
@@ -46,6 +48,7 @@ This web-based scheduling system provides a comprehensive platform for both admi
 - Integrated leave request system
 - User-specific notification system
 - Flexible user role management
+- Shift exchange request and approval system
 
 ---
 
