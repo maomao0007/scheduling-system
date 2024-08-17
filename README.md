@@ -1,4 +1,4 @@
-# Scheduling System
+![admin-schedules-calendar](https://github.com/user-attachments/assets/20d46851-5e14-44d2-b64b-a13772dc3bf7)# Scheduling System
 
 ## Introduction
 
@@ -144,3 +144,11 @@ This project requires the following software to be installed:
 - "sequelize-cli": "^6.6.2"
 
 ## Screenshot
+![signin](https://github.com/user-attachments/assets/ce8c06a8-80fb-4752-ad4c-172ce5b73603)
+![admin-schedules-calendar](https://github.com/user-attachments/assets/7915cd88-511a-4e4c-9afd-bd61b1bfd9d8)
+![feeds](https://github.com/user-attachments/assets/3f968c00-bddf-49d9-b851-8cb423d43668)
+![admin-users](https://github.com/user-attachments/assets/3aad2476-d509-4bd2-acc4-601f049e404a)
+![admin-shifts](https://github.com/user-attachments/assets/62cfa8c1-b691-4971-9a6d-f481b8831028)
+
+
+
