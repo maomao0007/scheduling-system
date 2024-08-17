@@ -1,4 +1,4 @@
-![admin-schedules-calendar](https://github.com/user-attachments/assets/20d46851-5e14-44d2-b64b-a13772dc3bf7)# Scheduling System
+# Scheduling System
 
 ## Introduction
 
