@@ -5,7 +5,7 @@
 
   <div class="row">
 
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="card">
         <div class="card-header bg-primary text-white">
           <h2 class="h5 mb-0">Schedules</h2>
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="card">
         <div class="card-header bg-success text-white">
           <h2 class="h5 mb-0">Leaves</h2>
@@ -54,13 +54,38 @@
                   <div><strong>Leave Type:</strong> {{this.name}}</div>
                   <div><strong>Start Date:</strong> {{formatDate this.startDate}}</div>
                   <div><strong>End Date:</strong> {{formatDate this.endDate}}</div>
-                  <div><strong>Status:</strong> {{this.status}}</div>
+                  <div><strong>Status:</strong>  <span class="fw-bold text-primary">{{this.status}}</span></div>
                   <div><strong>Created:</strong> {{formatDate this.createdAt}}</div>
                 </div>
               {{/ifCond}}
             {{/each}}
           {{else}}
             <p class="text-muted">No leaves available.</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-warning text-white">
+          <h2 class="h5 mb-0">Swap Schedules</h2>
+        </div>
+        <div class="card-body">
+          {{#if swaps.length}}
+            {{#each swaps}}
+              {{#ifCond this.userId ../user.id}}
+                <div class="swap-item mb-3 p-3 border rounded">
+                  <div><strong>Start Shift Date</strong> {{formatDate this.startDate}}</div>
+                  <div><strong>End Shift Date</strong> {{formatDate this.endDate}}</div>
+                  <div><strong>Swap With:</strong> {{this.Colleague.name}}</div>
+                  <div><strong>Status:</strong> <span class="fw-bold text-primary">{{this.status}}</span></div>
+                  <div><strong>Created:</strong> {{formatDate this.createdAt}}</div>
+                </div>
+              {{/ifCond}}
+            {{/each}}
+          {{else}}
+            <p class="text-muted">No swap schedules available.</p>
           {{/if}}
         </div>
       </div>

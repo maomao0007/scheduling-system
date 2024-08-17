@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs'); 
-const { User, Schedule, Leave, Shift } = require('../models');
+const { User, Schedule, Leave, Shift, Swap } = require('../models');
 const { imgFileHandler } = require('../helpers/file-helpers');
 const { relativeTimeFromNow } = require('../helpers/handlebars-helpers');
 const { NUMBER } = require('sequelize');
@@ -118,7 +118,7 @@ const userController = {
   getFeeds: async (req, res, next) => {
     try {
      const id = req.user.id;
-     const [user, schedules, leaves] = await Promise.all([
+     const [user, schedules, leaves, swaps] = await Promise.all([
        User.findByPk(id, { raw: true }),
        Schedule.findAll({
          where: { userId: id },
@@ -132,14 +132,22 @@ const userController = {
          order: [['createdAt', 'ASC']],
          raw: true,
        }),
+       Swap.findAll({
+         where: { userId: id },
+         include: [{ model: User, as: "Colleague" }],
+         order: [['createdAt', 'ASC']],
+         nest: true,
+         raw: true,
+       })
      ]);
   
-    const hasNotifications = schedules.length > 0 || leaves.length > 0; if (!hasNotifications) { 
+    const hasNotifications =
+      schedules.length > 0 || leaves.length > 0 || swaps.length > 0; if (!hasNotifications) { 
     req.flash('info', 'There are no notifications.'); 
     return res.redirect('/schedules/calendar');
     }
 
-    res.render('feeds', { user, schedules, leaves });
+    res.render('feeds', { user, schedules, leaves, swaps });
     } catch(err) {
       next(err);
     }
