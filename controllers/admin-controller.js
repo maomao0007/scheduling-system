@@ -34,7 +34,7 @@ const adminController = {
       console.log("Schedules:", schedules);
       console.log("Users:", users);
       console.log("Shifts:", shifts);
-      return res.render("admin/schedule-create", {
+      return res.render("admin/schedule-new", {
         schedules,
         users,
         shifts,

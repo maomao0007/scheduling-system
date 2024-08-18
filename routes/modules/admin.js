@@ -9,7 +9,7 @@ router.put('/schedules/:id', adminController.putSchedule);
 router.get('/schedules/:id/edit', adminController.getEditSchedule);
 router.delete('/schedules/:id', adminController.deleteSchedule);
 router.get('/schedules', adminController.getSchedules);
-router.get('/schedules/create', adminController.createSchedule);
+router.get('/schedules/new', adminController.createSchedule);
 router.get('/schedules/calendar', adminController.calendarSchedule);
 router.patch('/users/:id', adminController.patchUser);
 router.get('/users', adminController.getUsers);

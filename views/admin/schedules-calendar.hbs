@@ -89,7 +89,7 @@
         window.location.href = `/admin/schedules/${existingSchedule.id}/edit`;
     } else {
         // If there is no schedule for that date, redirect to the create page
-        window.location.href = `/admin/schedules/create?date=${clickedDate}`;
+        window.location.href = `/admin/schedules/new?date=${clickedDate}`;
       }
     }
   });
