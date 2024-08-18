@@ -23,16 +23,4 @@ module.exports = {
   },
   relativeTimeFromNow: (a) => dayjs(a).fromNow(),
 
-  getStatusColor: function(status) {
-    switch(status.toLowerCase()) {
-      case 'approved':
-        return 'text-success';
-      case 'pending':
-        return 'text-warning';
-      case 'rejected':
-        return 'text-danger';
-      default:
-        return 'text-secondary';
-    }
-  }
 };

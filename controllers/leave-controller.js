@@ -2,7 +2,7 @@ const { Leave, User } = require('../models');
 
 const leaveController = {
   getApplyLeave: (req, res, next) => {
-    return res.render('applyLeaves', { user: req.user });
+    return res.render("leaves-apply", { user: req.user });
   },
   postApplyLeave: (req, res, next) => {
     const { startDate, endDate, name, reason } = req.body;
@@ -11,9 +11,7 @@ const leaveController = {
       Leave.create({ userId: req.user.id, startDate, endDate, name, reason })
         .then(() => {
           req.flash('success_messages', 'Submitted successfully');
-          res.redirect('/applyLeaves');
-          // console.log("User ID:", req.user.id);
-          // console.log("Request Body:", req.body);
+          res.redirect('/leaves');
         })
         .catch((err) => next(err));
   },
@@ -29,7 +27,7 @@ const leaveController = {
         nest: true,
         raw: true
       });
-      res.render('leaveStatus', { leaves });
+      res.render("leaves-status", { leaves });
     } catch (err) {
       next(err);
     }

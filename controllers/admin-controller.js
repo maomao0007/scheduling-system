@@ -34,7 +34,7 @@ const adminController = {
       console.log("Schedules:", schedules);
       console.log("Users:", users);
       console.log("Shifts:", shifts);
-      return res.render("admin/create-schedule", {
+      return res.render("admin/schedule-create", {
         schedules,
         users,
         shifts,
@@ -215,7 +215,7 @@ const adminController = {
         }
       });
 
-      return res.render("admin/edit-schedule", {
+      return res.render("admin/schedule-edit", {
         schedule,
         users,
         shifts,
@@ -364,7 +364,7 @@ const adminController = {
         raw: true,
         nest: true,
       });
-      res.render("admin/swap-schedules", { swaps });
+      res.render("admin/schedules-swap", { swaps });
     } catch (err) {
       next(err);
     }
@@ -389,7 +389,7 @@ const adminController = {
         where: { isAdmin: true },
         raw: true,
       });
-      res.render("admin/swap-schedule", { swap, admin });
+      res.render("admin/schedule-swap", { swap, admin });
     } catch (err) {
       next(err);
     }
@@ -408,7 +408,7 @@ const adminController = {
         { where: { id } }
       );
       req.flash("success_messages", "Updated successfully !");
-      res.redirect("/admin/swap-schedules");
+      res.redirect("/admin/schedules-swap");
     } catch (err) {
       next(err);
     }

@@ -1,4 +1,4 @@
-{{> schedule-tabs route='swapSchedules'}}
+{{> schedule-tabs route='schedules-swap'}}
 
 <div class="container mt-5">
   <div class="card shadow">
@@ -6,7 +6,7 @@
       <h3 class="mb-0">Swap Schedules Request</h3>
     </div>
     <div class="card-body">
-      <form action="/swap-schedules" method="POST">
+      <form action="/schedules-swap" method="POST">
         <div class="mb-3">
           <label class="form-label">Name:</label>
           <input type="text" class="form-control" value="{{user.name}}" readonly>

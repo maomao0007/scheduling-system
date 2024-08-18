@@ -31,26 +31,26 @@ router.put('/users/:id', upload.single('image'), authenticated, userController.p
 router.get('/schedules', authenticated, scheduleController.getSchedules);
 router.get("/schedules/:id", authenticated, scheduleController.getSchedule);
 router.post(
-  "/swap-schedules",
+  "/schedules-swap",
   authenticated,
   swapSchedulesController.postSwapSchedules
 );
 router.get(
-  "/swap-schedules",
+  "/schedules-swap",
   authenticated,
   swapSchedulesController.getSwapSchedules
 );
 router.get(
-  "/swap-schedules/status",
+  "/schedules-swap/status",
   authenticated,
   swapSchedulesController.getSwapStatus
 );
 router.get(
-  '/applyLeaves',
+  '/leaves',
   authenticated,
   leaveController.getApplyLeave
 );
-router.post('/applyLeaves', authenticated, leaveController.postApplyLeave);
+router.post('/leaves', authenticated, leaveController.postApplyLeave);
 router.get('/leaves/status', authenticated, leaveController.getLeaveStatus);
 router.use('/', (req, res) => res.redirect('/schedules'));
 router.use('/', generalErrorHandler); 

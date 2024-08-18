@@ -26,7 +26,7 @@
           <td>{{formatDate swap.endDate}}</td>
           <td>{{swap.Colleague.name}}</td>
           <td>
-            <form action="/admin/swap-schedules/{{swap.id}}" method="POST">
+            <form action="/admin/schedules-swap/{{swap.id}}" method="POST">
               <label for="status" class="form-label">Status:</label>
               <select id="status" name="status" class="form-control" required>
                 <option value="" disabled>Select Status</option>

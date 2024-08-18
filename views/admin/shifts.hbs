@@ -45,13 +45,13 @@
         <td>{{this.endTime}}</td>
 
         <td>
-          <button type="button" class="btn btn-link">
-            <a class="btn btn-link link-primary" href="/admin/shifts/{{this.id}}">
+          <button type="button" style="text-decoration: none;">
+            <a class="btn link-primary" href="/admin/shifts/{{this.id}}">
               Edit
             </a>
           </button>
-          <form action="/admin/shifts/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
-            <button type="submit" class="btn btn-link link-danger" onclick="return confirm(`Are you sure you want to delete {{ this.name }}?`);">Delete</button>
+          <form action="/admin/shifts/{{this.id}}?_method=DELETE" method="POST" style="display: inline; text-decoration: none;">
+            <button type="submit" class="btn link-danger" onclick="return confirm(`Are you sure you want to delete {{ this.name }}?`);">Delete</button>
           </form>
         </td>
       </tr>

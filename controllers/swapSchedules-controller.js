@@ -6,7 +6,7 @@ const swapSchedulesController = {
         attributes: ["id", "name"],
         raw: true,
       });
-      return res.render("swapSchedules", { users });
+      return res.render("schedules-swap", { users });
     } catch (err) {
       next(err);
     }
@@ -23,7 +23,7 @@ const swapSchedulesController = {
       await Swap.create({ userId, colleagueId, reason, startDate, endDate });
 
       req.flash("success_messages", "Submitted successfully !");
-      return res.redirect("/swap-schedules");
+      return res.redirect("/schedules-swap");
     } catch (err) {
       next(err);
     }
@@ -41,7 +41,7 @@ const swapSchedulesController = {
         raw: true,
         nest: true,
       });
-      res.render('swapStatus', { swaps });
+      res.render("schedules-swap-status", { swaps });
     } catch (err) {
       next(err);
     }

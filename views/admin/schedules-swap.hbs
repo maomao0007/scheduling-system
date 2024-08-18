@@ -1,4 +1,4 @@
-{{> admin-tabs route="swapSchedules" }}
+{{> admin-tabs route="schedules-swap" }}
 
 <div class="container mt-4">
   <h2 class="mb-4">Swap Schedules Requests</h2>
@@ -34,7 +34,7 @@
           <td>{{this.status}}</td>
           <td>{{this.Approver.name}}</td>
           <td>
-            <a href="/admin/swap-schedules/{{this.id}}" class="btn btn-primary">Check</a>
+            <a href="/admin/schedules-swap/{{this.id}}" class="btn btn-primary">Check</a>
           </td>
         </tr>
         {{/each}}
