@@ -148,7 +148,7 @@ This project requires the following software to be installed:
 ![admin-schedules-calendar](https://github.com/user-attachments/assets/7915cd88-511a-4e4c-9afd-bd61b1bfd9d8)
 ![feeds](https://github.com/user-attachments/assets/3f968c00-bddf-49d9-b851-8cb423d43668)
 ![admin-shifts](https://github.com/user-attachments/assets/02d927bd-a00e-4c21-8f17-08f3c7f0c8d8)
-![admin-shifts](https://github.com/user-attachments/assets/62cfa8c1-b691-4971-9a6d-f481b8831028)
+![admin-users](https://github.com/user-attachments/assets/36ee27a4-2e9a-4162-b722-1b79f99f3c20)
 ![applyLeaves](https://github.com/user-attachments/assets/b51a1f4d-0753-4ec5-99a9-2354f302ae8c)
 ![swap-schedules](https://github.com/user-attachments/assets/9133f7cf-7be9-41f5-b58b-0f56a1a40733)
 
