@@ -134,7 +134,7 @@ const userController = {
        }),
        Swap.findAll({
          where: { userId: id },
-         include: [{ model: User, as: "Colleague" }],
+         include: [{ model: User, as: 'Colleague' }],
          order: [['createdAt', 'ASC']],
          nest: true,
          raw: true,

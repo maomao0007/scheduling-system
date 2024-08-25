@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Swaps", {
+    await queryInterface.createTable('Swaps', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -22,8 +22,8 @@ module.exports = {
         type: Sequelize.DATEONLY,
       },
       status: {
-        type: Sequelize.ENUM("pending", "approved", "rejected"),
-        defaultValue: "pending",
+        type: Sequelize.ENUM('pending', 'approved', 'rejected'),
+        defaultValue: 'pending',
       },
       reason: {
         type: Sequelize.TEXT,
@@ -43,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Swaps");
+    await queryInterface.dropTable('Swaps');
   }
 };

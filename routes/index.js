@@ -5,7 +5,7 @@ const upload = require('../middleware/multer');
 
 const scheduleController = require('../controllers/schedule-controller'); 
 const leaveController = require('../controllers/leave-controller');
-const swapSchedulesController = require("../controllers/swapSchedules-controller");
+const swapSchedulesController = require('../controllers/swapSchedules-controller');
 const userController = require('../controllers/user-controller'); 
 const { authenticated, authenticatedAdmin } = require('../middleware/auth'); 
 const { generalErrorHandler } = require('../middleware/error-handler');
@@ -29,19 +29,19 @@ router.get('/users/:id', authenticated, userController.getProfile);
 router.get('/users/:id/edit', authenticated, userController.getEditProfile);
 router.put('/users/:id', upload.single('image'), authenticated, userController.putProfile);
 router.get('/schedules', authenticated, scheduleController.getSchedules);
-router.get("/schedules/:id", authenticated, scheduleController.getSchedule);
+router.get('/schedules/:id', authenticated, scheduleController.getSchedule);
 router.post(
-  "/schedules-swap",
+  '/schedules-swap',
   authenticated,
   swapSchedulesController.postSwapSchedules
 );
 router.get(
-  "/schedules-swap",
+  '/schedules-swap',
   authenticated,
   swapSchedulesController.getSwapSchedules
 );
 router.get(
-  "/schedules-swap/status",
+  '/schedules-swap/status',
   authenticated,
   swapSchedulesController.getSwapStatus
 );

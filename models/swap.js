@@ -10,14 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Swap.belongsTo(models.User, { foreignKey: "userId", as: "Requester" });
+      Swap.belongsTo(models.User, { foreignKey: 'userId', as: 'Requester' });
       Swap.belongsTo(models.User, {
-        foreignKey: "approvedById",
-        as: "Approver",
+        foreignKey: 'approvedById',
+        as: 'Approver',
       });
       Swap.belongsTo(models.User, {
-        foreignKey: "colleagueId",
-        as: "Colleague",
+        foreignKey: 'colleagueId',
+        as: 'Colleague',
       });
     }
   }
@@ -31,14 +31,14 @@ module.exports = (sequelize, DataTypes) => {
       endDate: DataTypes.DATEONLY,
       reason: DataTypes.TEXT,
       status: {
-        type: DataTypes.ENUM("pending", "approved", "rejected"),
-        defaultValue: "pending",
+        type: DataTypes.ENUM('pending', 'approved', 'rejected'),
+        defaultValue: 'pending',
       },
     },
     {
       sequelize,
-      modelName: "Swap",
-      tableName: "Swaps",
+      modelName: 'Swap',
+      tableName: 'Swaps',
       underscored: true,
     }
   );

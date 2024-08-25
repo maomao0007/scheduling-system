@@ -2,7 +2,7 @@ const { Leave, User } = require('../models');
 
 const leaveController = {
   getApplyLeave: (req, res, next) => {
-    return res.render("leaves-apply", { user: req.user });
+    return res.render('leaves-apply', { user: req.user });
   },
   postApplyLeave: (req, res, next) => {
     const { startDate, endDate, name, reason } = req.body;
@@ -27,7 +27,7 @@ const leaveController = {
         nest: true,
         raw: true
       });
-      res.render("leaves-status", { leaves });
+      res.render('leaves-status', { leaves });
     } catch (err) {
       next(err);
     }
