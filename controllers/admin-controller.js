@@ -1,20 +1,33 @@
 const { Schedule, User, Leave, Shift, Swap } = require('../models');
 const ruleController = require('./rule-controller');
+const { getOffset, getPagination } = require("../helpers/pagination-helper");
 
 const adminController = {
   getSchedules: (req, res, next) => {
+    // 10 entries per page
+    const DEFAULT_LIMIT = 10;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || DEFAULT_LIMIT;
+    const offset = getOffset(limit, page);
     return Promise.all([
       Schedule.findAll({
-        include: ['User', 'Shift'],
-        order: [['date', 'ASC']],
+        include: ["User", "Shift"],
+        order: [["date", "ASC"]],
         raw: true,
         nest: true,
+        limit,
+        offset,
       }),
       User.findAll({ raw: true }),
       Shift.findAll({ raw: true }),
     ])
       .then(([schedules, users, shifts]) => {
-        return res.render('admin/schedules', { schedules, users, shifts });
+        return res.render("admin/schedules", {
+          schedules,
+          users,
+          shifts,
+          pagination: getPagination(limit, page, schedules.count),
+        });
       })
       .catch((err) => next(err));
   },
