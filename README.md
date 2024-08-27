@@ -49,12 +49,13 @@ This web-based scheduling system provides a comprehensive platform for both admi
 - User-specific notification system
 - Flexible user role management
 - Shift exchange request and approval system
+- Redis caching for getProfile functionality, optimizing performance for frequent profile access
 
 ---
 
 ## Environment Setup
 This project requires the following software to be installed:
-- Node.js v18.15.0
+- Node.js v20.12.2
 - MySQL v8
 
 ## How to Use
@@ -140,6 +141,7 @@ This project requires the following software to be installed:
 - "passport": "^0.7.0"
 - "passport-jwt": "^4.0.1"
 - "passport-local": "^1.0.0"
+- "redis": "^4.7.0"
 - "sequelize": "^6.37.3"
 - "sequelize-cli": "^6.6.2"
 
