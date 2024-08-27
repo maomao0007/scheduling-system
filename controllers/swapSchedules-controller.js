@@ -1,4 +1,5 @@
 const { Schedule, User, Shift, Swap } = require('../models');
+
 const swapSchedulesController = {
   getSwapSchedules: async (req, res, next) => {
     try {

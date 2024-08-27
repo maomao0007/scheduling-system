@@ -69,12 +69,12 @@ const userController = {
           throw new Error("This user does not exist!");
         }
 
-        // Store data in Redis with a 1-hour expiration
+        // Store data in Redis with a 10 mins expiration
         await redisClient.set(
           `profile:${profileUserId}`,
           JSON.stringify(profileUser),
           "EX",
-          3600
+          600
         );
       }
 
@@ -132,9 +132,18 @@ const userController = {
       await profileUser.update({
         image: filePath || profileUser.image,
       });
+
+      // Invalidate the user profile cache in Redis
+      try {
+        await redisClient.del(`profile:${profileUserId}`);
+        console.log(`Redis cache cleared for user ${profileUserId}`);
+      } catch (redisError) {
+        console.error("Error clearing Redis cache:", redisError);
+      }
+
       res.render("users/profile", {
         user, // This is for the header
-        profileUser, // This is for the profile
+        profileUser: profileUser.toJSON(), // Use the latest data
       });
     } catch (err) {
       next(err);

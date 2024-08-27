@@ -113,43 +113,12 @@ const adminController = {
         where: { date },
       });
 
-      // Create a map to track assigned users for the day
-      // const assignedUsers = new Map();
-
-      // Counter for the number of shifts scheduled for the day
-      // let shiftCount = 0;
       const assignedUsers = new Set();
 
       for (const [shiftKey, userId] of Object.entries(shiftSelections)) {
         if (!userId) continue;
         const shiftId = shiftKey.split('_')[1];
 
-        // Check if we've exceeded the maximum number of shifts per day
-        // if (shiftCount >= 3) {
-        //   req.flash(
-        //     "error_messages",
-        //     "Maximum of 3 shifts per day has been reached."
-        //   );
-        //   return res.redirect("/admin/schedules/calendar");
-        // }
-
-        // Fetch user details
-        // const user = await User.findByPk(userId);
-        //   if (!user) {
-        //   req.flash("error_messages", `User with ID ${userId} not found.`);
-        //   return res.redirect("/admin/schedules/calendar");
-        // }
-
-        // Check if this user is already assigned to another shift on this day
-        // if (assignedUsers.has(userId)) {
-        //   req.flash(
-        //     "error_messages",
-        //     `${user.name} is already assigned to another shift on this day.`
-        //   );
-        //   return res.redirect("/admin/schedules/calendar");
-        // }
-
-        // Check scheduling rules
         const ruleViolation = await ruleController.checkShiftRules(
           userId,
           date,
@@ -164,31 +133,8 @@ const adminController = {
           );
           return res.redirect('/admin/schedules/calendar');
         }
-
-        // Mark this user as assigned for this day
-        // assignedUsers.set(userId, shiftId);
-
-        // Increment the shift count
-        // shiftCount++;
-
-        // Check if there is an existing schedule, if not, create a new schedule
-        // const existingSchedule = await Schedule.findOne({
-        //   where: { date, shiftId, id },
-        // });
-
-        // Add user to the set of assigned users
         assignedUsers.add(userId);
-
-        // if (existingSchedule) {
-        // Update the existing schedule
-        //   await Schedule.update(
-        //     { userId },
-        //     { where: { id: existingSchedule.id } }
-        //   );
-        // } else {
-        // Create a new schedule
         await Schedule.create({ date, userId, shiftId });
-        // }
       }
 
       req.flash('success_messages', 'Successfully updated!');
