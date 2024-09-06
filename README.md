@@ -91,9 +91,19 @@ This project requires the following software to be installed:
    npx sequelize-cli db:seed:all
    ```
 
-8. Set environment variables (Skip this step for Mac/Linux):
+8. Set environment variables: This project uses env.example as a template file showing all required environment variables.
+   
+   Setup steps:
+   - Duplicate the env.example file in the project root directory.
+   - Rename the duplicated file to .env.
+   - Open the .env file and replace the placeholder values with your actual configuration.
+
+   Ensure your .env file contains the following variables:
    ```shell
-   export NODE_ENV=development
+   NODE_ENV=development
+   PORT=3000
+   SESSION_SECRET=your_session_secret
+   REDIS_URL=redis://localhost:port
    ```
 
 9. Start the application:
