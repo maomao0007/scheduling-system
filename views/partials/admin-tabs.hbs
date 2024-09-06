@@ -3,9 +3,6 @@
   <li class="nav-item">
     <a class="nav-link {{#ifCond route 'schedules'}}active{{/ifCond}}" href="/admin/schedules/calendar">Schedules</a>
   </li>
-   {{!-- <form action="/admin/schedules" method="POST" class="d-inline"> --}}
-      {{!-- <button type="submit" class="btn nav-link {{#ifCond route 'createSchedules'}}active{{/ifCond}}">Create Schedules</button> --}}
-    {{!-- </form> --}}
     <a type="submit" class="btn nav-link {{#ifCond route 'schedule-new'}}active{{/ifCond}}" href="/admin/schedules/new">Create a Schedule</a>
   </li>
   <li class="nav-item">
