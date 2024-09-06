@@ -100,6 +100,7 @@ This project requires the following software to be installed:
 
    Ensure your .env file contains the following variables:
    ```shell
+   DATABASE_URL=mysql://username:password@host:port/database
    NODE_ENV=development
    PORT=3000
    SESSION_SECRET=your_session_secret
