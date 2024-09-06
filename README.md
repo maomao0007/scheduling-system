@@ -55,7 +55,7 @@ This web-based scheduling system provides a comprehensive platform for both admi
 
 ## Environment Setup
 This project requires the following software to be installed:
-- Node.js v20.12.2
+- Node.js v18.15.0
 - MySQL v8
 
 ## How to Use
