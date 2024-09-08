@@ -82,7 +82,6 @@ This project requires the following software to be installed:
    ```shell
    DATABASE_URL=mysql://root:your_secure_password@mysql:3306/scheduling_system
    MYSQL_ROOT_PASSWORD=your_secure_password
-   NODE_ENV=development
    PORT=3000
    SESSION_SECRET=your_session_secret
    REDIS_URL=redis://redis:6379
@@ -92,9 +91,14 @@ This project requires the following software to be installed:
    A. For Docker setup:
       - Ensure Docker and Docker Compose are installed on your system.
       - Build and start the Docker containers:
-        ```shell
-        docker-compose up --build
-        ```
+        * For production environment:
+          ```
+          docker-compose up --build
+          ```
+        * For development environment:
+          ```
+          NODE_ENV=development docker-compose up --build
+          ```
       - The application will automatically run migrations, seed the database, and start the server.
   
    B. For local setup:
