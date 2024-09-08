@@ -57,6 +57,9 @@ This web-based scheduling system provides a comprehensive platform for both admi
 This project requires the following software to be installed:
 - Node.js v18.15.0
 - MySQL v8
+- Redis v7.2.5
+- Docker v26.1.1
+- Docker Compose v2.27.0
 
 ## How to Use
 1. Clone the repository:
@@ -68,30 +71,7 @@ This project requires the following software to be installed:
    ```shell
    cd scheduling-system
    ```
-
-3. Install dependencies:
-   ```shell
-   npm install
-   ```
-
-4. Set up the MySQL database to match the configuration in `config/config.json`.
-
-5. Create database:
-   ```shell
-   CREATE DATABASE scheduling_system;
-   ```
-
-6. Create tables:
-   ```shell
-   npx sequelize db:migrate
-   ```
-
-7. Set seed data:
-   ```shell
-   npx sequelize-cli db:seed:all
-   ```
-
-8. Set environment variables: This project uses env.example as a template file showing all required environment variables.
+3. Set environment variables: 
    
    Setup steps:
    - Duplicate the env.example file in the project root directory.
@@ -100,21 +80,51 @@ This project requires the following software to be installed:
 
    Ensure your .env file contains the following variables:
    ```shell
+   DATABASE_URL=mysql://root:your_secure_password@mysql:3306/scheduling_system
+   MYSQL_ROOT_PASSWORD=your_secure_password
    NODE_ENV=development
    PORT=3000
    SESSION_SECRET=your_session_secret
-   REDIS_URL=redis://localhost:port
+   REDIS_URL=redis://redis:6379
    ```
+4. Choose between Docker and local setup:
 
-9. Start the application:
-   ```shell
-   npm run dev
-   ```
+   A. For Docker setup:
+      - Ensure Docker and Docker Compose are installed on your system.
+      - Build and start the Docker containers:
+        ```shell
+        docker-compose up --build
+        ```
+      - The application will automatically run migrations, seed the database, and start the server.
+  
+   B. For local setup:
+      - Install dependencies:
+        ```shell
+        npm install
+        ```
+      - Create database:
+        ```shell
+        CREATE DATABASE scheduling_system;
+        ```
+      - Create tables:
+        ```shell
+        npx sequelize db:migrate
+        ```
+      - Set seed data:
+        ```shell
+        npx sequelize-cli db:seed:all
+        ```
+      - Start the application:
+        ```shell
+        npm run dev
+        ```
 
-10. The server should now be running at `http://localhost:3000`.
+5. The server should now be running at `http://localhost:3000`.
 
-11. To stop the server, use `Ctrl + C`.
-
+6. To stop the server:
+   - For Docker: Use `docker-compose down` in the terminal.
+   - For local setup: Use `Ctrl + C` in the terminal.
+     
 ## Login Credentials
 
 1. Admin Account:
