@@ -39,3 +39,7 @@ upload/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+.dockerignore
+
+config/config.json
