@@ -49,6 +49,7 @@ This web-based scheduling system provides a comprehensive platform for both admi
 - User-specific notification system
 - Flexible user role management
 - Shift exchange request and approval system
+- Redis caching for getProfile functionality, optimizing performance for frequent profile access
 
 ---
 
@@ -56,6 +57,9 @@ This web-based scheduling system provides a comprehensive platform for both admi
 This project requires the following software to be installed:
 - Node.js v18.15.0
 - MySQL v8
+- Redis v7.2.5
+- Docker v26.1.1
+- Docker Compose v2.27.0
 
 ## How to Use
 1. Clone the repository:
@@ -67,43 +71,64 @@ This project requires the following software to be installed:
    ```shell
    cd scheduling-system
    ```
+3. Set environment variables: 
+   
+   Setup steps:
+   - Duplicate the env.example file in the project root directory.
+   - Rename the duplicated file to .env.
+   - Open the .env file and replace the placeholder values with your actual configuration.
 
-3. Install dependencies:
+   Ensure your .env file contains the following variables:
    ```shell
-   npm install
+   DATABASE_URL=mysql://root:your_secure_password@mysql:3306/scheduling_system
+   MYSQL_ROOT_PASSWORD=your_secure_password
+   PORT=3000
+   SESSION_SECRET=your_session_secret
+   REDIS_URL=redis://redis:6379
    ```
+4. Choose between Docker and local setup:
 
-4. Set up the MySQL database to match the configuration in `config/config.json`.
+   A. For Docker setup:
+      - Ensure Docker and Docker Compose are installed on your system.
+      - Build and start the Docker containers:
+        * For production environment:
+          ```
+          docker-compose up --build
+          ```
+        * For development environment:
+          ```
+          NODE_ENV=development docker-compose up --build
+          ```
+      - The application will automatically run migrations, seed the database, and start the server.
+  
+   B. For local setup:
+      - Install dependencies:
+        ```shell
+        npm install
+        ```
+      - Create database:
+        ```shell
+        CREATE DATABASE scheduling_system;
+        ```
+      - Create tables:
+        ```shell
+        npx sequelize db:migrate
+        ```
+      - Set seed data:
+        ```shell
+        npx sequelize-cli db:seed:all
+        ```
+      - Start the application:
+        ```shell
+        npm run dev
+        ```
 
-5. Create database:
-   ```shell
-   CREATE DATABASE scheduling_system;
-   ```
+5. The server should now be running at `http://localhost:3000`.
 
-6. Create tables:
-   ```shell
-   npx sequelize db:migrate
-   ```
-
-7. Set seed data:
-   ```shell
-   npx sequelize-cli db:seed:all
-   ```
-
-8. Set environment variables (Skip this step for Mac/Linux):
-   ```shell
-   export NODE_ENV=development
-   ```
-
-9. Start the application:
-   ```shell
-   npm run dev
-   ```
-
-10. The server should now be running at `http://localhost:3000`.
-
-11. To stop the server, use `Ctrl + C`.
-
+6. To stop the server:
+   - For Docker: Use `docker-compose down` in the terminal.
+   - For local setup: Use `Ctrl + C` in the terminal.
+     
 ## Login Credentials
 
 1. Admin Account:
@@ -140,6 +165,7 @@ This project requires the following software to be installed:
 - "passport": "^0.7.0"
 - "passport-jwt": "^4.0.1"
 - "passport-local": "^1.0.0"
+- "redis": "^4.7.0"
 - "sequelize": "^6.37.3"
 - "sequelize-cli": "^6.6.2"
 
