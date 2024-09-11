@@ -42,4 +42,4 @@ upload/
 
 .dockerignore
 
-config/config.json
+# config/config.json

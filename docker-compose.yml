@@ -30,15 +30,15 @@ services:
       - "6379:6379"
     restart: always
 
-  mysql:
-    image: mysql:8
-    ports:
-      - "3307:3306"
-    env_file:
-      - .env
-    volumes:
-      - mysql_data:/var/lib/mysql
-    restart: always
+  # mysql:
+  #   image: mysql:8
+  #   ports:
+  #     - "3307:3306"
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   restart: always
 
 volumes:
   mysql_data:
