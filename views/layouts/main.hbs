@@ -14,6 +14,13 @@
   <script src="https://cdn.jsdelivr.net/npm/parsleyjs@2/dist/parsley.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/date-fns@latest/dist/date-fns.min.js"></script>
   <script src='https://unpkg.com/@fullcalendar/interaction/main.js'></script>
+  
+  {{#if isChatPage}}
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script src="/javascripts/chat-bundle.js"></script>
+   {{/if}}
 
 </head>
 <body class="d-flex flex-column h-100 bg-light">

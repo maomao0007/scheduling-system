@@ -1,6 +1,7 @@
 if (process.env.NODE_ENV === "development") {
   require("dotenv").config();
 }
+
 const { Sequelize } = require("sequelize");
 const env = process.env.NODE_ENV || "development";
 const config = require("./config/config.json")[env];
@@ -43,6 +44,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(methodOverride('_method'));
+
 app.use(
   session({
     // Use Redis as session store
@@ -70,16 +72,15 @@ app.listen(port, () => {
   console.info(`Example app listening on port ${port}!`);
 });
 
-process.on("SIGTERM", async () => {
+// Graceful shutdown
+const gracefulShutdown = async () => {
   console.log("Application is shutting down");
   await redisClient.quit();
+  await sequelize.close();
   process.exit(0);
-});
+};
 
-process.on("SIGINT", async () => {
-  console.log("Gracefully shutting down");
-  await redisClient.quit();
-  process.exit(0);
-});
+process.on("SIGTERM", gracefulShutdown);
+process.on("SIGINT", gracefulShutdown);
 
 module.exports = app;

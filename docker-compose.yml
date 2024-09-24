@@ -1,27 +1,14 @@
 # services:
-#   app:
-#     build:
-#       context: .
-#       target: ${NODE_ENV:-production}
+#    app:
+#     build: .
 #     ports:
 #       - "3000:3000"
-#     env_file:
-#       - .env
 #     environment:
-#       - NODE_ENV=${NODE_ENV:-production}
+#     DB_HOST: db
 #     depends_on:
 #       - redis
 #       - mysql
-#     command: >
-#       sh -c '
-#         npx sequelize-cli db:migrate &&
-#         npx sequelize-cli db:seed:all &&
-#         if [ "$${NODE_ENV}" = "development" ]; then
-#           npm run dev;
-#         else
-#           npm start;
-#         fi
-#       '
+#     command: [ "node", "app.js" ]
 #     restart: always
 
 #   redis:
