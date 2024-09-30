@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@fullcalendar/interaction": "^6.1.15",
+    "@socket.io/admin-ui": "^0.5.1",
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
     "connect-redis": "^7.1.1",
@@ -37,7 +38,8 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "redis": "^4.7.0",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "socket.io": "^4.8.0"
   },
   "devDependencies": {
     "eslint": "^9.7.0",

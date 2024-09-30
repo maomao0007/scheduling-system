@@ -1,0 +1,132 @@
+{{> schedule-tabs route='messages'}}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Messages</h1>
+    
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    Send a Message
+                </div>
+                <div class="card-body">
+                    <form id="send-message-form">
+                        <div class="mb-3">
+                            <label for="recipientId" class="form-label">Recipient</label>
+                            <select class="form-select" name="recipientId" required>
+                                {{#each users}}
+                                    <option value="{{this.id}}">{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Message</label>
+                            <textarea class="form-control" name="content" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    Message History
+                </div>
+                <div class="card-body">
+                    <div id="messages">
+                        {{#each messages}}
+                            <div class="mb-3">
+                                <strong>{{#ifCond this.senderId ../currentUserId}}You{{else}}{{this.sender.name}}{{/ifCond}}</strong>
+                                <small class="text-muted">({{formatDate this.createdAt}})</small>
+                                <p class="mb-0">{{this.content}}</p>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {{#if hasPrevPage}}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{subtract currentPage 1}}">&laquo; Previous</a>
+                        </li>
+                    {{else}}
+                        <li class="page-item disabled">
+                            <span class="page-link">&laquo; Previous</span>
+                        </li>
+                    {{/if}}
+                    
+                    <li class="page-item disabled">
+                        <span class="page-link">Page {{currentPage}} of {{totalPages}}</span>
+                    </li>
+                    
+                    {{#if hasNextPage}}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{add currentPage 1}}">Next &raquo;</a>
+                        </li>
+                    {{else}}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next &raquo;</span>
+                        </li>
+                    {{/if}}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const messagesDiv = document.getElementById('messages');
+  const form = document.getElementById('send-message-form');
+  const currentUserId = '{{currentUserId}}';
+
+  socket.on('connect', () => {
+    console.log('WebSocket connected');
+    socket.emit('join', '{{currentUserId}}');
+  });
+
+  socket.on('newMessage', (message) => {
+    addMessageToUI(message);
+  });
+
+  function addMessageToUI(message) {
+    const messageElement = document.createElement('div');
+    messageElement.className = 'mb-3';
+    const senderName = message.senderId === currentUserId ? 'You' : message.sender.name;
+      messageElement.innerHTML = `
+      <strong>${senderName}</strong>
+      <small class="text-muted">(${new Date(message.createdAt).toLocaleString()})</small>
+      <p class="mb-0">${message.content}</p>
+    `;
+    messagesDiv.appendChild(messageElement);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    try {
+      const response = await fetch('/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(formData)),
+      });
+      const result = await response.json();
+      if (result.success) {
+        form.reset();
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Failed to send message');
+    }
+  });
+</script>

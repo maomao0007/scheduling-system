@@ -22,6 +22,18 @@ const methodOverride = require('method-override');
 const app = express();
 const port = process.env.PORT || 3000;
 
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: ["http://localhost:3000", "https://admin.socket.io"],
+  },
+});
+
+// const pool = require("./config/database");
+
 const flash = require('connect-flash');
 const passport = require('./config/passport');
 const handlebarsHelpers = require('./helpers/handlebars-helpers');
@@ -42,6 +54,8 @@ app.engine('hbs', engine({ extname: '.hbs', helpers: handlebarsHelpers }));
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json());
 
 app.use(methodOverride('_method'));
 
@@ -67,20 +81,36 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(routes);
-app.listen(port, () => {
-  console.info(`Example app listening on port ${port}!`);
-});
-
 // Graceful shutdown
 const gracefulShutdown = async () => {
   console.log("Application is shutting down");
   await redisClient.quit();
   await sequelize.close();
+  // await pool.end();
   process.exit(0);
 };
 
 process.on("SIGTERM", gracefulShutdown);
 process.on("SIGINT", gracefulShutdown);
+
+app.set("io", io);
+
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  socket.on("join", (userId) => {
+    socket.join(userId);
+    console.log(`User ${userId} joined`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+  });
+});
+
+app.use(routes);
+httpServer.listen(port, () => {
+  console.info(`Example app listening on port ${port}!`);
+});
 
 module.exports = app;
