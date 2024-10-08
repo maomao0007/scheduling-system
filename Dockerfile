@@ -1,15 +1,14 @@
-# Base image
+# #Base image
 # FROM node:18 
 
-# Create app directory
+# #Create app directory
 # WORKDIR /app
 
-# ENV NODE_ENV=production
+# #Install app dependencies
+# COPY package*.json ./
+# RUN npm install 
 
-# Install app dependencies
-# COPY ["package.json", "package-lock.json*", "./"]
-# RUN npm install --production
-
-# Bundle app source
+# #Bundle app source
 # COPY . .
-# CMD [ "node", "app.js" ]
+# EXPOSE 3000
+# CMD [ "npm", "run", "dev" ]

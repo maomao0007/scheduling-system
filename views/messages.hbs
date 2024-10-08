@@ -87,10 +87,11 @@
 
   socket.on('connect', () => {
     console.log('WebSocket connected');
-    socket.emit('join', '{{currentUserId}}');
+    socket.emit('join', currentUserId);
   });
 
   socket.on('newMessage', (message) => {
+    console.log('New message received:', message);
     addMessageToUI(message);
   });
 
@@ -102,13 +103,13 @@
       <strong>${senderName}</strong>
       <small class="text-muted">(${new Date(message.createdAt).toLocaleString()})</small>
       <p class="mb-0">${message.content}</p>
-    `;
+      `;
     messagesDiv.appendChild(messageElement);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }
 
   form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    {{!-- e.preventDefault(); --}}
     const formData = new FormData(form);
     try {
       const response = await fetch('/messages', {
@@ -129,4 +130,5 @@
       alert('Failed to send message');
     }
   });
+
 </script>

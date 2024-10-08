@@ -3,21 +3,26 @@
 #     build: .
 #     ports:
 #       - "3000:3000"
-#     environment:
-#     DB_HOST: db
+#     env_file:
+#       - .env
 #     depends_on:
 #       - redis
 #       - mysql
-#     command: [ "node", "app.js" ]
+#     command: [ "npm", "run", "dev" ]
 #     restart: always
 
-#   redis:
+#    redis:
 #     image: redis:alpine
 #     ports:
 #       - "6379:6379"
 #     restart: always
+#     healthcheck:
+#       test: ["CMD", "redis-cli", "ping"]
+#       interval: 5s
+#       timeout: 5s
+#       retries: 5
 
-#   mysql:
+#    mysql:
 #     image: mysql:8
 #     ports:
 #       - "3307:3306"

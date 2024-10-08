@@ -10,14 +10,19 @@ let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
 }
 
-const express = require('express');
-const path = require('path');
-const routes = require('./routes');
-const { engine } = require('express-handlebars');
-const methodOverride = require('method-override');
+const express = require("express");
+const path = require("path");
+const routes = require("./routes");
+const { engine } = require("express-handlebars");
+const methodOverride = require("method-override");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -34,30 +39,30 @@ const io = new Server(httpServer, {
 
 // const pool = require("./config/database");
 
-const flash = require('connect-flash');
-const passport = require('./config/passport');
-const handlebarsHelpers = require('./helpers/handlebars-helpers');
-const session = require('express-session');
+const flash = require("connect-flash");
+const passport = require("./config/passport");
+const handlebarsHelpers = require("./helpers/handlebars-helpers");
+const session = require("express-session");
 // Load connect-redis
 const RedisStore = require("connect-redis").default;
 // Load Redis client
 const redisClient = require("./config/redisClient");
 
 const SESSION_SECRET = process.env.SESSION_SECRET;
-const { getUser } = require('./helpers/auth-helpers');
+const { getUser } = require("./helpers/auth-helpers");
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/upload', express.static(path.join(__dirname, 'upload')));
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/upload", express.static(path.join(__dirname, "upload")));
 // use Handlebars template engine, and specify the file extension as.hbs
-app.engine('hbs', engine({ extname: '.hbs', helpers: handlebarsHelpers }));
+app.engine("hbs", engine({ extname: ".hbs", helpers: handlebarsHelpers }));
 // set Handlebars as the template engine
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'views'));
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
-app.use(methodOverride('_method'));
+app.use(methodOverride("_method"));
 
 app.use(
   session({
