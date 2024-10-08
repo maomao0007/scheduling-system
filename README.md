@@ -58,8 +58,6 @@ This project requires the following software to be installed:
 - Node.js v18.15.0
 - MySQL v8
 - Redis v7.2.5
-- Docker v26.1.1
-- Docker Compose v2.27.0
 
 ## How to Use
 1. Clone the repository:
@@ -80,28 +78,11 @@ This project requires the following software to be installed:
 
    Ensure your .env file contains the following variables:
    ```shell
-   DATABASE_URL=mysql://root:your_secure_password@mysql:3306/scheduling_system
-   MYSQL_ROOT_PASSWORD=your_secure_password
-   PORT=3000
+   DATABASE_URL=mysql://root:your_secure_password@localhost:3306/scheduling_system
    SESSION_SECRET=your_session_secret
-   REDIS_URL=redis://redis:6379
    ```
-4. Choose between Docker and local setup:
-
-   A. For Docker setup:
-      - Ensure Docker and Docker Compose are installed on your system.
-      - Build and start the Docker containers:
-        * For production environment:
-          ```
-          docker-compose up --build
-          ```
-        * For development environment:
-          ```
-          NODE_ENV=development docker-compose up --build
-          ```
-      - The application will automatically run migrations, seed the database, and start the server.
+4. Setup:
   
-   B. For local setup:
       - Install dependencies:
         ```shell
         npm install
@@ -126,7 +107,6 @@ This project requires the following software to be installed:
 5. The server should now be running at `http://localhost:3000`.
 
 6. To stop the server:
-   - For Docker: Use `docker-compose down` in the terminal.
    - For local setup: Use `Ctrl + C` in the terminal.
      
 ## Login Credentials
