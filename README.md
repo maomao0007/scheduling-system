@@ -87,7 +87,7 @@ This project requires the following software to be installed:
         ```shell
         npm install
         ```
-      - Create database:
+      - Create database in MySQL:
         ```shell
         CREATE DATABASE scheduling_system;
         ```
