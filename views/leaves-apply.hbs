@@ -42,10 +42,11 @@
         <div class="mb-3">
           <label for="reason" class="form-label">Reason:</label>
           <textarea id="reason" name="reason" class="form-control" rows="4" required></textarea>
+          <div id="reasonError" style="color: red; display: none;"></div>
         </div>
 
         <div class="d-flex justify-content-between mt-4">
-          <button class="btn btn-primary" type="submit" onclick="return confirmSubmission()">Submit Request</button>
+          <button class="btn btn-primary" type="submit"id="button" onclick="return confirmSubmission()">Submit Request</button>
           <a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
         </div>
       </form>
@@ -58,7 +59,7 @@
   const today = new Date().toISOString().split('T')[0];
   const startDateInput = document.getElementById('startDate');
   const endDateInput = document.getElementById('endDate');
-
+    
   startDateInput.setAttribute('min', today);
   endDateInput.setAttribute('min', today);
 
@@ -72,7 +73,28 @@
     startDateInput.max = endDate;
   });
 })
+
+  const reason = document.getElementById('reason');
+  const reasonError = document.getElementById('reasonError');
+  const submitBtn = document.getElementById('button');
+
+  reason.addEventListener('input', function(e) {
+  const value = e.target.value
+
+  // Simple SQL injection check
+  const invalidChars = /['";-]/
+  if (invalidChars.test(value)) {
+    reasonError.textContent = 'Please do not use special characters';
+    reasonError.style.display = 'block';
+    submitBtn.disabled = true
+     } else {
+    reasonError.style.display = 'none';
+    submitBtn.disabled = false
+    }
+  })
+
   function confirmSubmission() {
     return confirm('Are you sure you want to submit this leave request?');
   }
+
 </script>
