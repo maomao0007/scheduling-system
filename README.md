@@ -78,8 +78,8 @@ This project requires the following software to be installed:
 
    Ensure your .env file contains the following variables:
    ```shell
-   DATABASE_URL=mysql://root:your_secure_password@localhost:3306/scheduling_system
-   SESSION_SECRET=your_session_secret
+   DATABASE_URL=mysql://DB_USERNAME:DB_PASSWORD@localhost:3306/scheduling_system
+   SESSION_SECRET=YOUR_SESSION_SECRET
    ```
 4. Setup:
   
@@ -87,7 +87,7 @@ This project requires the following software to be installed:
         ```shell
         npm install
         ```
-      - Create database:
+      - Create database in MySQL:
         ```shell
         CREATE DATABASE scheduling_system;
         ```
