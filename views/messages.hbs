@@ -14,8 +14,9 @@
                         <div class="mb-3">
                             <label for="recipientId" class="form-label">Recipient</label>
                             <select class="form-select" name="recipientId" required>
+                              <option value="">Select a recipient</option> 
                                 {{#each users}}
-                                    <option value="{{this.id}}">{{this.name}}</option>
+                                    <option value="{{this.id}}"{{#ifCond ../selectedUserId this.id}}selected{{/ifCond}}?>{{this.name}}</option>
                                 {{/each}}
                             </select>
                         </div>
@@ -23,7 +24,7 @@
                             <label for="content" class="form-label">Message</label>
                             <textarea class="form-control" name="content" rows="3" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-primary" id="submit">Send</button>
                     </form>
                 </div>
             </div>
@@ -35,23 +36,31 @@
                     Message History
                 </div>
                 <div class="card-body">
-                    <div id="messages">
-                        {{#each messages}}
-                            <div class="mb-3">
-                                <strong>{{#ifCond this.senderId ../currentUserId}}You{{else}}{{this.sender.name}}{{/ifCond}}</strong>
-                                <small class="text-muted">({{formatDate this.createdAt}})</small>
-                                <p class="mb-0">{{this.content}}</p>
-                            </div>
-                        {{/each}}
+                  <div id="messages">
+                    {{#each users}}
+                    <div id="chat-{{this.id}}" class="chat-history" style="display: none;">
+                      <div class="card-header text-secondary">Message with {{this.name}}
                     </div>
+                      <div class="card-body">
+                        {{#each this.messages}}
+                        <div class="mb-3">
+                          <strong>{{#ifCond this.senderId ../currentUserId}}You{{else}}{{this.sender.name}}{{/ifCond}}</strong>
+                          <small class="text-muted">({{formatDate this.createdAt}})</small>
+                          <p class="mb-0">{{this.content}}</p>
+                        </div>
+                        {{/each}}
+                      </div>
+                    </div>
+                    {{/each}}
+                  </div>
                 </div>
-            </div>
+              </div>
             
             <nav aria-label="Page navigation" class="mt-4">
                 <ul class="pagination justify-content-center">
                     {{#if hasPrevPage}}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{subtract currentPage 1}}">&laquo; Previous</a>
+                            <a class="page-link" href="?page={{subtract currentPage 1}}&userId={{selectedUserId}}">&laquo; Previous</a>
                         </li>
                     {{else}}
                         <li class="page-item disabled">
@@ -65,7 +74,7 @@
                     
                     {{#if hasNextPage}}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{add currentPage 1}}">Next &raquo;</a>
+                            <a class="page-link" href="?page={{add currentPage 1}}&userId={{selectedUserId}}">Next &raquo;</a>
                         </li>
                     {{else}}
                         <li class="page-item disabled">
@@ -84,6 +93,9 @@
   const messagesDiv = document.getElementById('messages');
   const form = document.getElementById('send-message-form');
   const currentUserId = '{{currentUserId}}';
+  const formSelect = document.querySelector(".form-select")
+  const chatHistories = document.querySelectorAll('.chat-history');
+  const submitBtn = document.querySelector("#submit")
 
   socket.on('connect', () => {
     console.log('WebSocket connected');
@@ -96,6 +108,10 @@
   });
 
   function addMessageToUI(message) {
+
+    const chatContainer = document.querySelector(`#chat-${message.senderId === currentUserId ? message.recipientId : message.senderId}`);
+    if (!chatContainer) return;
+
     const messageElement = document.createElement('div');
     messageElement.className = 'mb-3';
     const senderName = message.senderId === currentUserId ? 'You' : message.sender.name;
@@ -104,13 +120,26 @@
       <small class="text-muted">(${new Date(message.createdAt).toLocaleString()})</small>
       <p class="mb-0">${message.content}</p>
       `;
-    messagesDiv.appendChild(messageElement);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    const messagesContainer = chatContainer.querySelector('.card-body');
+
+   if (messagesContainer.firstChild) {
+        messagesContainer.insertBefore(messageElement, messagesContainer.firstChild);
+    } else {
+        messagesContainer.appendChild(messageElement);
+    }
+    
+    if (formSelect.value === (message.senderId === currentUserId ? message.recipientId : message.senderId)) {
+        chatContainer.style.display = 'block';
+    }
   }
 
   form.addEventListener('submit', async (e) => {
-    {{!-- e.preventDefault(); --}}
+    e.preventDefault();
     const formData = new FormData(form);
+    // Store current selected user ID
+    const selectedUserId = formSelect.value;
+    const messageContent = formData.get('content');
+
     try {
       const response = await fetch('/messages', {
         method: 'POST',
@@ -121,7 +150,30 @@
       });
       const result = await response.json();
       if (result.success) {
-        form.reset();
+        // Create message object for immediate display
+      const newMessage = {
+        senderId: currentUserId,
+        recipientId: selectedUserId,
+        content: messageContent,
+        createdAt: new Date(),
+        sender: {
+                  id: currentUserId,
+                  name: 'You'
+                }
+        };
+      // Add message to UI immediately
+      addMessageToUI(newMessage);
+            
+      // Only reset the textarea, keep the selected user unchanged
+      form.querySelector('textarea').value = '';
+        
+      // Keep the chat window visible
+      const selectedChat = document.querySelector(`#chat-${selectedUserId}`);
+      if (selectedChat) {
+        selectedChat.style.display = 'block';
+      }
+      // Re-select the previous user    
+      formSelect.value = selectedUserId;
       } else {
         alert(result.message);
       }
@@ -129,6 +181,20 @@
       console.error('Error sending message:', error);
       alert('Failed to send message');
     }
-  });
+  })
+
+    formSelect.addEventListener("change", (e) => {
+
+      const selectedUserId = e.target.value
+       chatHistories.forEach(chat => {
+        chat.style.display = 'none';
+      });
+      if (selectedUserId) {
+        const selectedChat = document.querySelector(`#chat-${selectedUserId}`);
+        if (selectedChat) {
+            selectedChat.style.display = 'block';
+        }
+      }
+      });
 
 </script>

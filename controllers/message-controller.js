@@ -7,6 +7,7 @@ const messageController = {
       const page = parseInt(req.query.page) || 1;
       const limit = 20;
       const offset = (page - 1) * limit;
+      const selectedUserId = req.query.userId;
 
       // Get all users except the current user
       const users = await User.findAll({
@@ -18,7 +19,7 @@ const messageController = {
       });
 
       // Get messages for the current user
-      const { count, rows: messages } = await Message.findAndCountAll({
+      const { count, rows: allMessages } = await Message.findAndCountAll({
         where: {
           [Op.or]: [{ senderId: req.user.id }, { recipientId: req.user.id }],
         },
@@ -33,20 +34,24 @@ const messageController = {
         offset: offset,
       });
 
-      console.log(
-        "users",
-        users
-      );
-      console.log(
-        "messages",
-        messages
-      );
+      // Prepare message lists for each user
+      const processedUsers = users.map((user) => ({
+        id: user.id,
+        name: user.name,
+        messages: allMessages.filter(
+          (msg) => msg.senderId === user.id || msg.recipientId === user.id
+        ),
+      }));
+
+      console.log("users", processedUsers);
+      console.log("messages", allMessages);
 
       const totalPages = Math.ceil(count / limit);
 
       res.render("messages", {
-        users,
-        messages,
+        users: processedUsers,
+        selectedUserId: selectedUserId,
+        messages: allMessages,
         currentUserId: req.user.id,
         currentPage: page,
         totalPages: totalPages,
