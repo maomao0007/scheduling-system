@@ -18,6 +18,10 @@ This web-based scheduling system provides a comprehensive platform for both admi
 - **User Management**:
   - Modify user access rights
   - Grant administrative privileges to users
+  
+- **Real-time Messaging**:
+  - One-on-one instant messaging with any user
+  - Message history tracking
 
 ### For Users
 
@@ -33,6 +37,10 @@ This web-based scheduling system provides a comprehensive platform for both admi
 - **Notification System**:
   - Access a dashboard for the latest updates
   - Receive notifications for schedule changes, leave request status updates and shift exchange request updates
+
+- **Real-time Messaging**:
+  - Direct messaging with administrators and other users
+  - Message history tracking 
 
 ## System Configuration
 
@@ -50,6 +58,7 @@ This web-based scheduling system provides a comprehensive platform for both admi
 - Flexible user role management
 - Shift exchange request and approval system
 - Redis caching for getProfile functionality, optimizing performance for frequent profile access
+- Socket.IO real-time chat system with message history management
 
 ---
 
@@ -125,10 +134,13 @@ This project requires the following software to be installed:
 
 ## Development Tools
 - "@fullcalendar/interaction": "^6.1.15"
+- "@socket.io/admin-ui": "^0.5.1"
 - "bcryptjs": "^2.4.3"
 - "connect-flash": "^0.1.1"
+- "connect-redis": "^7.1.1"
 - "date-fns": "^3.6.0"
 - "dayjs": "^1.11.12"
+- "debug": "^4.3.7",
 - "dotenv": "^16.4.5"
 - "eslint": "^9.7.0"
 - "express": "^4.19.2"
@@ -148,6 +160,7 @@ This project requires the following software to be installed:
 - "redis": "^4.7.0"
 - "sequelize": "^6.37.3"
 - "sequelize-cli": "^6.6.2"
+- "socket.io": "^4.8.0"
 
 ## Screenshot
 ![signin](https://github.com/user-attachments/assets/ce8c06a8-80fb-4752-ad4c-172ce5b73603)
