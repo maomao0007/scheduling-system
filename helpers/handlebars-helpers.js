@@ -14,11 +14,11 @@ module.exports = {
     return obj[field];
   },
   formatDate: function (date) {
-    return new Date(date).toLocaleDateString("en-SG", {
+    return new Date(date).toLocaleDateString('en-SG', {
       // weekday: "long",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   },
   relativeTimeFromNow: (a) => dayjs(a).fromNow(),

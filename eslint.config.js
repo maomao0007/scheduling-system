@@ -8,7 +8,7 @@ module.exports = [
     languageOptions: {
       ecmaVersion: 2021,
       sourceType: 'module',
-      globals: {
+      globals:{ 
         // Define global variables here if needed
       },
     },

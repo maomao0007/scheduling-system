@@ -65,7 +65,7 @@
         const modalContent = document.getElementById('modalContent');
         const editLink = document.getElementById('editLink');
         const deleteForm = document.getElementById('deleteForm');
-        
+    
         modalContent.innerHTML = `
           <p>Date: ${info.event.extendedProps.Date}</p>
           <p>Name: ${info.event.extendedProps.User}</p>
@@ -73,10 +73,13 @@
           <p>Shift Start Time: ${info.event.extendedProps.ShiftStartTime}</p>
           <p>Shift End Time: ${info.event.extendedProps.ShiftEndTime}</p>
         `;
-        editLink.href =`/admin/schedules/${info.event.extendedProps.Edit}/edit`
-        deleteForm.action = `/admin/schedules/${info.event.extendedProps.Delete}`
 
+        editLink.href =`/admin/schedules/${info.event.extendedProps.Edit}/edit`
+        deleteForm.action = `/admin/schedules/${info.event.extendedProps.Delete}`;
+
+        console.log('editLink.href:', editLink.href);
         console.log('Delete form action set to:', deleteForm.action);
+
         eventModal.show();
       },
     dateClick: function(info) {
@@ -94,27 +97,42 @@
     }
   });
 
-    calendar.render();
-
     // Handle delete form submission
     const deleteForm = document.getElementById('deleteForm');
     
     deleteForm.addEventListener('submit', function(e) {
       e.preventDefault()
-      if (confirm('Are you sure you want to delete this data?')) {
-      console.log('Submitting delete form to:', this.action);
-      console.log('Form method:', this.method);
-      console.log('Form data:', new FormData(this));
-      this.submit();
-      }
-    })
-    // Check the URL parameters to see if a delete operation was just performed
+
+      if (confirm('Are you sure you want to delete this schedule?')) {
+        fetch(this.action, { 
+          method: 'DELETE', 
+          headers: { 
+            'Content-Type': 'application/json' 
+            } 
+          })
+      .then(response => {
+         if (response.ok) {
+                alert('Schedule successfully deleted');
+            } else {
+                throw new Error(`Delete failed with status: ${response.status}`);
+            }
+        })
+      .catch(error => {
+            console.error('Delete failed:', error);
+            alert('Failed to delete schedule');
+        });
+    }
+})
+
+    calendar.render();
+
+    {{!-- // Check the URL parameters to see if a delete operation was just performed
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('action') === 'delete') {
       alert('Schedule successfully deleted.');
        // Remove the URL parameters
       window.history.replaceState({}, document.title, window.location.pathname);
-    }
+    } --}}
   });
 </script>
 

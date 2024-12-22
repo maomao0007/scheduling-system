@@ -1,12 +1,12 @@
-const { Model } = require("sequelize");
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Message extends Model {
     static associate(models) {
-      Message.belongsTo(models.User, { as: "sender", foreignKey: "senderId" });
+      Message.belongsTo(models.User, { as: 'sender', foreignKey: 'senderId' });
       Message.belongsTo(models.User, {
-        as: "recipient",
-        foreignKey: "recipientId",
+        as: 'recipient',
+        foreignKey: 'recipientId',
       });
     }
   }
@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Message",
-      tableName: "Messages",
+      modelName: 'Message',
+      tableName: 'Messages',
       underscored: true,
     }
   );

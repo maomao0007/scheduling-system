@@ -7,7 +7,7 @@ const scheduleController = require('../controllers/schedule-controller');
 const leaveController = require('../controllers/leave-controller');
 const swapSchedulesController = require('../controllers/swapSchedules-controller');
 const userController = require('../controllers/user-controller'); 
-const messageController = require("../controllers/message-controller");
+const messageController = require('../controllers/message-controller');
 const { authenticated, authenticatedAdmin } = require('../middleware/auth'); 
 const { generalErrorHandler } = require('../middleware/error-handler');
 const admin = require('./modules/admin');
@@ -23,8 +23,7 @@ router.post(
   }),
   userController.signIn
 ); 
-router.get('/logout', userController.logout);
-
+router.post('/logout', userController.logout);
 router.get('/feeds', authenticated, userController.getFeeds);
 router.get('/users/:id', authenticated, userController.getProfile);
 router.get('/users/:id/edit', authenticated, userController.getEditProfile);
@@ -53,8 +52,8 @@ router.get(
 );
 router.post('/leaves', authenticated, leaveController.postApplyLeave);
 router.get('/leaves/status', authenticated, leaveController.getLeaveStatus);
-router.get("/messages", authenticated, messageController.getMessagePage);
-router.post("/messages", authenticated, messageController.sendMessage);
+router.get('/messages', authenticated, messageController.getMessagePage);
+router.post('/messages', authenticated, messageController.sendMessage);
 router.use('/', (req, res) => res.redirect('/schedules'));
 router.use('/', generalErrorHandler); 
 

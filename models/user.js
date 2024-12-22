@@ -23,12 +23,12 @@ module.exports = (sequelize, DataTypes) => {
         as: 'ColleagueSwaps',
       });
       User.hasMany(models.Message, {
-        as: "SentMessages",
-        foreignKey: "senderId",
+        as: 'SentMessages',
+        foreignKey: 'senderId',
       });
       User.hasMany(models.Message, {
-        as: "ReceivedMessages",
-        foreignKey: "recipientId",
+        as: 'ReceivedMessages',
+        foreignKey: 'recipientId',
       });
     }
   }
