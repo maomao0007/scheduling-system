@@ -16,7 +16,7 @@
                             <select class="form-select" name="recipientId" required>
                               <option value="">Select a recipient</option> 
                                 {{#each users}}
-                                    <option value="{{this.id}}"{{#ifCond ../selectedUserId this.id}}selected{{/ifCond}}?>{{this.name}}</option>
+                                    <option value="{{this.id}}"{{#ifCond ../selectedUserId this.id}}selected{{/ifCond}}>{{this.name}}</option>
                                 {{/each}}
                             </select>
                         </div>
@@ -39,8 +39,7 @@
                   <div id="messages">
                     {{#each users}}
                     <div id="chat-{{this.id}}" class="chat-history" style="display: none;">
-                      <div class="card-header text-secondary">Message with {{this.name}}
-                    </div>
+                      <div class="card-header text-secondary">Message with {{this.name}}</div>
                       <div class="card-body">
                         {{#each this.messages}}
                         <div class="mb-3">
@@ -54,7 +53,7 @@
                     {{/each}}
                   </div>
                 </div>
-              </div>
+            </div>
             
             <nav aria-label="Page navigation" class="mt-4">
                 <ul class="pagination justify-content-center">
@@ -89,14 +88,29 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
+  // Initialize socket connection and DOM elements
   const socket = io();
   const messagesDiv = document.getElementById('messages');
   const form = document.getElementById('send-message-form');
   const currentUserId = '{{currentUserId}}';
-  const formSelect = document.querySelector(".form-select")
+  const formSelect = document.querySelector(".form-select");
   const chatHistories = document.querySelectorAll('.chat-history');
-  const submitBtn = document.querySelector("#submit")
+  const submitBtn = document.querySelector("#submit");
+  
+  // Get initial userId from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialUserId = urlParams.get('userId');
+  
+  // If URL has userId, set select box and show corresponding chat
+  if (initialUserId) {
+    formSelect.value = initialUserId;
+    const selectedChat = document.querySelector(`#chat-${initialUserId}`);
+    if (selectedChat) {
+      selectedChat.style.display = 'block';
+    }
+  }
 
+  // WebSocket event handlers
   socket.on('connect', () => {
     console.log('WebSocket connected');
     socket.emit('join', currentUserId);
@@ -107,36 +121,36 @@
     addMessageToUI(message);
   });
 
+  // Function to add new messages to the UI
   function addMessageToUI(message) {
-
     const chatContainer = document.querySelector(`#chat-${message.senderId === currentUserId ? message.recipientId : message.senderId}`);
     if (!chatContainer) return;
 
     const messageElement = document.createElement('div');
     messageElement.className = 'mb-3';
     const senderName = message.senderId === currentUserId ? 'You' : message.sender.name;
-      messageElement.innerHTML = `
+    messageElement.innerHTML = `
       <strong>${senderName}</strong>
       <small class="text-muted">(${new Date(message.createdAt).toLocaleString()})</small>
       <p class="mb-0">${message.content}</p>
-      `;
+    `;
     const messagesContainer = chatContainer.querySelector('.card-body');
 
-   if (messagesContainer.firstChild) {
-        messagesContainer.insertBefore(messageElement, messagesContainer.firstChild);
+    if (messagesContainer.firstChild) {
+      messagesContainer.insertBefore(messageElement, messagesContainer.firstChild);
     } else {
-        messagesContainer.appendChild(messageElement);
+      messagesContainer.appendChild(messageElement);
     }
     
     if (formSelect.value === (message.senderId === currentUserId ? message.recipientId : message.senderId)) {
-        chatContainer.style.display = 'block';
+      chatContainer.style.display = 'block';
     }
   }
 
+  // Handle form submission for sending messages
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
-    // Store current selected user ID
     const selectedUserId = formSelect.value;
     const messageContent = formData.get('content');
 
@@ -150,30 +164,24 @@
       });
       const result = await response.json();
       if (result.success) {
-        // Create message object for immediate display
-      const newMessage = {
-        senderId: currentUserId,
-        recipientId: selectedUserId,
-        content: messageContent,
-        createdAt: new Date(),
-        sender: {
-                  id: currentUserId,
-                  name: 'You'
-                }
+        const newMessage = {
+          senderId: currentUserId,
+          recipientId: selectedUserId,
+          content: messageContent,
+          createdAt: new Date(),
+          sender: {
+            id: currentUserId,
+            name: 'You'
+          }
         };
-      // Add message to UI immediately
-      addMessageToUI(newMessage);
-            
-      // Only reset the textarea, keep the selected user unchanged
-      form.querySelector('textarea').value = '';
+        addMessageToUI(newMessage);
+        form.querySelector('textarea').value = '';
         
-      // Keep the chat window visible
-      const selectedChat = document.querySelector(`#chat-${selectedUserId}`);
-      if (selectedChat) {
-        selectedChat.style.display = 'block';
-      }
-      // Re-select the previous user    
-      formSelect.value = selectedUserId;
+        const selectedChat = document.querySelector(`#chat-${selectedUserId}`);
+        if (selectedChat) {
+          selectedChat.style.display = 'block';
+        }
+        formSelect.value = selectedUserId;
       } else {
         alert(result.message);
       }
@@ -181,20 +189,57 @@
       console.error('Error sending message:', error);
       alert('Failed to send message');
     }
-  })
+  });
 
-    formSelect.addEventListener("change", (e) => {
+  // Handle recipient selection change
+  formSelect.addEventListener("change", (e) => {
+    const selectedUserId = e.target.value;
+    
+    // Update URL parameters (reset to page 1 when changing recipient)
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('userId', selectedUserId);
+    urlParams.set('page', '1');  // Reset to first page
+    
+    // Construct the new URL with updated parameters
+    const newUrl = `${location.pathname}?${urlParams.toString()}`;
+    
+    // Redirect to the new URL
+    window.location.href = newUrl;
+  });
 
-      const selectedUserId = e.target.value
-       chatHistories.forEach(chat => {
-        chat.style.display = 'none';
-      });
-      if (selectedUserId) {
-        const selectedChat = document.querySelector(`#chat-${selectedUserId}`);
-        if (selectedChat) {
-            selectedChat.style.display = 'block';
+  // Function to update pagination links
+  function updatePaginationLinks(userId) {
+    const paginationLinks = document.querySelectorAll('.pagination .page-link');
+    paginationLinks.forEach(link => {
+      if (!link.classList.contains('disabled') && link.href) {
+        const linkUrl = new URL(link.href, window.location.href);
+        if (userId) {
+          linkUrl.searchParams.set('userId', userId);
+          link.href = linkUrl.toString();
         }
       }
-      });
+    });
+  }
 
+  // Update pagination links on page load
+  if (initialUserId) {
+    updatePaginationLinks(initialUserId);
+  }
+
+  // Handle browser back/forward buttons
+  window.addEventListener('popstate', function(event) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('userId');
+    
+    if (userId) {
+      formSelect.value = userId;
+      chatHistories.forEach(chat => {
+        chat.style.display = 'none';
+      });
+      const selectedChat = document.querySelector(`#chat-${userId}`);
+      if (selectedChat) {
+        selectedChat.style.display = 'block';
+      }
+    }
+  });
 </script>
